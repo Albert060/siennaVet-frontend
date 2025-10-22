@@ -1,0 +1,95 @@
+.login-form {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
+  background: linear-gradient(135deg, var(--fondo-secundario) 0%, var(--fondo) 100%);
+  padding: 20px;
+  
+  > div {
+    background-color: var(--fondo);
+    color: var(--texto);
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+    max-width: 450px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--fondo-secundario);
+  }
+}
+
+.login-form h2 {
+  color: var(--principal);
+  
+  text-align: center;
+  font-size: 2.2rem;
+  margin: 0;
+}
+
+.login-form p {
+  text-align: center;
+  color: var(--subtitulo);
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.form-conteiner {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-conteiner label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 500;
+  color: var(--subtitulo);
+}
+
+.form-conteiner input {
+  padding: 14px;
+  border-radius: 12px;
+  border: 2px solid var(--fondo-secundario);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-conteiner input:focus {
+  outline: none;
+  border-color: var(--principal);
+  box-shadow: 0 0 0 3px rgba(85, 133, 181, 0.2);
+}
+
+.form-conteiner input[type="submit"] {
+  background-color: var(--principal);
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(85, 133, 181, 0.3);
+}
+
+.form-conteiner input[type="submit"]:hover {
+  background-color: var(--principalSombra);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(85, 133, 181, 0.4);
+}
+
+.form-conteiner input[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 576px) {
+  .login-form > div {
+    padding: 30px 20px;
+  }
+}

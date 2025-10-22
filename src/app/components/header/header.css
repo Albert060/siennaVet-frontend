@@ -1,0 +1,86 @@
+.header-landing {
+  width: 100%;
+  background-color: var(--fondo);
+  margin: 20px;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  align-items: center;
+  border-radius: 15px;
+  box-shadow: 3px 3px 15px rgba(85, 133, 181, 0.2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.derecha {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.logo {
+  width: 100px;
+  height: 80px;
+  background-image: url("../../../../public/logoSienaVet.png");
+  background-size:100px 155px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.logo img {
+  width: 80px;
+  object-fit: cover;
+}
+
+.cta {
+  width: 150px;
+  padding: 12px 20px;
+  background-color: var(--principal);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(85, 133, 181, 0.3);
+}
+
+.cta:hover {
+  background-color: var(--principalSombra);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(85, 133, 181, 0.4);
+}
+
+.referen ul {
+  display: flex;
+  list-style: none;
+  gap: 30px;
+  align-items: center;
+}
+
+.referen ul li a {
+  text-decoration: none;
+  color: var(--texto);
+  font-weight: 500;
+  transition: color 0.3s ease;
+  position: relative;
+}
+
+.referen ul li a:hover {
+  color: var(--principal);
+}
+
+.referen ul li a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -5px;
+  left: 0;
+  background-color: var(--principal);
+  transition: width 0.3s ease;
+}
+
+.referen ul li a:hover::after {
+  width: 100%;
+}

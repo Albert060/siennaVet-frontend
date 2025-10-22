@@ -1,0 +1,25 @@
+<main class="login-form">
+    <div>
+    <h2>SiennaVet</h2>
+    <p>Bienvenido</p>
+
+    <form #userForm="ngForm" (ngSubmit)="login(userForm)"  class="form-conteiner">
+        <label for="">
+            Email
+            <input type="email" ngModel name="email" id="email">
+        </label>
+
+        <label for="">
+            Contraseña 
+
+            <input type="password" ngModel name="contrasena" id="contrasena">
+        </label>
+
+        <input type="submit" value="Login">
+        
+        <span *ngIf="error" [style.color]="'red'">
+            {{error}}
+        </span>
+    </form>
+    </div>
+</main>
