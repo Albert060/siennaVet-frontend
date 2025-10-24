@@ -1,0 +1,40 @@
+<aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>SiennaVet</h2>
+      </div>
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a 
+              routerLink="/dashboard" 
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: true}"
+              class="sidebar-link"
+            >
+              <span class="icon">🏠</span>
+              <span class="link-text">Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a 
+              routerLink="/dashboard/citas" 
+              routerLinkActive="active"
+              class="sidebar-link"
+            >
+              <span class="icon">📅</span>
+              <span class="link-text">Citas</span>
+            </a>
+          </li>
+          <li>
+            <a 
+              routerLink="/dashboard/vets" 
+              routerLinkActive="active"
+              class="sidebar-link"
+            >
+              <span class="icon">👨‍⚕️</span>
+              <span class="link-text">Veterinarios</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>

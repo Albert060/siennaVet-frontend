@@ -2,12 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface AuthI{
-  email: String
-  contrasena: String
+  email: string
+  contrasena: string
 }
 export interface Response {
   success: boolean
-  mensaje: String
+  mensaje: string
 }
 
 @Injectable({

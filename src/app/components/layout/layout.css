@@ -1,0 +1,19 @@
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--fondo, #bbe4e9);
+}
+
+.dashboard-content {
+  flex: 1;
+  padding: 1rem;
+  margin-left: 250px; /* Ancho del sidebar */
+  margin-top: 0;
+  background-color: var(--fondo-secundario, #bbe4e9);
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    margin-left: 70px; /* Ancho del sidebar en móvil */
+  }
+}

@@ -29,11 +29,20 @@
     max-width: 200px;
     margin-top: 10px;
   }
-  h3 {
+
+  h3{
     font-size: 1.3rem;
     color: var(--principal);
     margin: 0;
   }
+
+  h2{
+    font-size: 2rem;
+    color: var(--principal);
+    margin: 0;
+    text-align: center;
+  }
+
   p {
     color: var(--subtitulo);
     margin: 10px 0 0;
