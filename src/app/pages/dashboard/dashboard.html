@@ -4,5 +4,51 @@
     Bienvenido al panel de control de SiennaVet. Aquí puedes gestionar citas, veterinarios y otros
     aspectos del sistema.
   </p>
-  <!-- Aquí iría el contenido específico del dashboard -->
+  
+  <!-- Tabla para mostrar las fichas médicas -->
+  <div class="fichas-table-container">
+    <h2>Registro de Fichas Médicas</h2>
+    
+    <!-- Mostrar mensaje de carga -->
+    <div *ngIf="cargando" class="loading">
+      Cargando fichas médicas...
+    </div>
+    
+    <!-- Mostrar mensaje de error -->
+    <div *ngIf="error != null" class="error">
+      {{ error }}
+    </div>
+    
+    <!-- Tabla de fichas -->
+    <table class="fichas-table" *ngIf="!cargando && !error">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Sexo</th>
+          <th>Edad</th>
+          <th>Peso</th>
+          <th>Chip</th>
+          <th>Raza</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ficha of listaFichas">
+          <td>{{ ficha.idFicha }}</td>
+          <td>{{ ficha.nombre }}</td>
+          <td>{{ ficha.sexo }}</td>
+          <td>{{ ficha.edad }}</td>
+          <td>{{ ficha.peso }}</td>
+          <td>{{ ficha.chip }}</td>
+          <td>{{ ficha.raza }}</td>
+          <td class="acciones-column">
+            <button class="btn-ver" (click)="verFicha(ficha)">Ver</button>
+            <button class="btn-editar" (click)="editarFicha(ficha)">Editar</button>
+            <button class="btn-eliminar" (click)="eliminarFicha(ficha)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>
