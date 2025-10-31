@@ -9,6 +9,8 @@ export interface FichaAnimales{
   peso: string;
   chip: string;
   raza: string;
+  idRaza: number;
+  idCliente: number;
 }
 
 @Injectable({
@@ -21,5 +23,9 @@ export class Ficha {
 
   listarFicha() {
     return this.http.get<FichaAnimales[]>(this.endpoint)
+  }
+
+  editarFicha(editarFicha: FichaAnimales) {
+    return this.http.put<FichaAnimales>(this.endpoint, editarFicha)
   }
 }

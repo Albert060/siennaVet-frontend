@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Ficha, FichaAnimales } from '../../services/ficha';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, NgIf],
+  imports: [CommonModule, NgIf, FormsModule],
   templateUrl: "./dashboard.html",
   styleUrls: ["./dashboard.css"]
 })
@@ -13,6 +14,8 @@ export class Dashboard implements OnInit {
   public error: null | string = null;
   public listaFichas: FichaAnimales[] = [];
   public cargando: boolean = false;
+  public showModal: boolean = false;
+  public fichaEditando: FichaAnimales | null = null;
 
   constructor(private service: Ficha) { }
 
@@ -50,13 +53,36 @@ export class Dashboard implements OnInit {
     // Aquí puedes redirigir a una página de detalle o abrir un modal
   }
 
-  editarFicha(ficha: FichaAnimales) {
-    // Lógica para editar la ficha
-    console.log('Editar ficha:', ficha);
-    // Aquí puedes redirigir a una página de edición o abrir un modal con el formulario
+  mostrarEditarFicha(ficha: FichaAnimales) {
+    this.fichaEditando = ficha;
+    this.showModal = true;
   }
 
-  eliminarFicha(ficha: FichaAnimales) {
+  cerrarModal() {
+    this.showModal = false;
+    this.fichaEditando = null;
+  }
+
+  guardarFicha() {
+    if (this.fichaEditando) {
+      this.editarFicha(this.fichaEditando);
+      this.cerrarModal();
+    }
+  }
+
+  editarFicha(fichaEditada: FichaAnimales) {
+    this.service.editarFicha(fichaEditada).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => {
+        console.error('Error al editar la ficha:', error);
+        this.error = 'Error al editar la ficha';
+      }
+    });
+  }
+
+  mostrarEliminarFicha(ficha: FichaAnimales) {
     // Lógica para eliminar la ficha
     console.log('Eliminar ficha:', ficha);
     // Aquí puedes mostrar un diálogo de confirmación y luego eliminar

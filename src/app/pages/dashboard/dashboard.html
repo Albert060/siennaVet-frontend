@@ -44,11 +44,62 @@
           <td>{{ ficha.raza }}</td>
           <td class="acciones-column">
             <button class="btn-ver" (click)="verFicha(ficha)">Ver</button>
-            <button class="btn-editar" (click)="editarFicha(ficha)">Editar</button>
-            <button class="btn-eliminar" (click)="eliminarFicha(ficha)">Eliminar</button>
+            <button class="btn-editar" (click)="mostrarEditarFicha(ficha)">Editar</button>
+            <button class="btn-eliminar" (click)="mostrarEliminarFicha(ficha)">Eliminar</button>
           </td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <!-- Modal de edición de ficha -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="cerrarModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Editar Ficha</h3>
+        <span class="close-btn" (click)="cerrarModal()">&times;</span>
+      </div>
+      <div class="modal-body" *ngIf="fichaEditando">
+        <form (ngSubmit)="guardarFicha()" #fichaForm="ngForm">
+          <div class="form-group">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" [(ngModel)]="fichaEditando.nombre" name="nombre" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="sexo">Sexo:</label>
+            <select id="sexo" [(ngModel)]="fichaEditando.sexo" name="sexo" class="form-control" required>
+              <option value="Macho">Macho</option>
+              <option value="Hembra">Hembra</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="edad">Edad:</label>
+            <input type="text" id="edad" [(ngModel)]="fichaEditando.edad" name="edad" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="peso">Peso:</label>
+            <input type="text" id="peso" [(ngModel)]="fichaEditando.peso" name="peso" class="form-control" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="chip">Chip:</label>
+            <input type="text" id="chip" [(ngModel)]="fichaEditando.chip" name="chip" class="form-control">
+          </div>
+          
+          <div class="form-group">
+            <label for="raza">Raza:</label>
+            <input type="text" id="raza" [(ngModel)]="fichaEditando.raza" name="raza" class="form-control" required>
+          </div>
+          
+          <div class="modal-footer">
+            <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+            <button type="submit" class="btn-guardar" [disabled]="!fichaForm.form.valid">Guardar</button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
