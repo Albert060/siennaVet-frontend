@@ -28,4 +28,8 @@ export class Ficha {
   editarFicha(editarFicha: FichaAnimales) {
     return this.http.put<FichaAnimales>(this.endpoint, editarFicha)
   }
+
+  eliminarFicha(eliminarFicha: FichaAnimales) {
+    return this.http.delete<FichaAnimales>(`${this.endpoint}/${eliminarFicha.idFicha}`)
+  }
 }

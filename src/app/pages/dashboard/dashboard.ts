@@ -16,6 +16,7 @@ export class Dashboard implements OnInit {
   public cargando: boolean = false;
   public showModal: boolean = false;
   public fichaEditando: FichaAnimales | null = null;
+  public eliminarFicha: FichaAnimales | null = null;
 
   constructor(private service: Ficha) { }
 
@@ -76,15 +77,25 @@ export class Dashboard implements OnInit {
         console.log(response);
       },
       error: (error) => {
-        console.error('Error al editar la ficha:', error);
-        this.error = 'Error al editar la ficha';
+        console.error('Error al modificar la ficha:', error);
+        this.error = 'Error al modificar la ficha';
       }
     });
   }
 
-  mostrarEliminarFicha(ficha: FichaAnimales) {
-    // Lógica para eliminar la ficha
-    console.log('Eliminar ficha:', ficha);
-    // Aquí puedes mostrar un diálogo de confirmación y luego eliminar
+  mostrarEliminarFicha(eliminarFicha: FichaAnimales) {
+    const confirmacion = confirm(`¿Estás seguro de eliminar la ficha con id ${eliminarFicha.idFicha}?`);
+    if (confirmacion) {
+      this.service.eliminarFicha(eliminarFicha).subscribe({
+        next: (response) => {
+          console.log(response);
+          // Actualiza el arreglo local filtrando por id
+          this.listaFichas = this.listaFichas.filter(f => f.idFicha !== eliminarFicha.idFicha);
+        },
+        error: (error) => {
+          console.error('Error al eliminar la ficha', error);
+        }
+      });
+    }
   }
 }

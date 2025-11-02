@@ -1,18 +1,64 @@
 <section class="contact-main" id="contact">
-    <section class="contact-descripcion">
-        <h2>Contactanos</h2>
+    <div class="section-header">
+        <h2 class="section-title">Contactanos</h2>
+        <div class="section-subtitle">¿Tienes alguna pregunta? Estamos aquí para ayudarte</div>
+    </div>
 
-        <ul>
-            <li>Calle Castro de oro, 13</li>
-            <li>Telefono: +34 602468905 <svg-WhatsApp [size]="{width:30, height:30}"></svg-WhatsApp></li>
-            <li>Email: pepitoperez@gmail.com <svg-Gmail [size]="{width:30, height:30}"></svg-Gmail></li>
-            <li>Redes Sociales
-            <svg-Facebook [size]="{width:30, height:30}"></svg-Facebook><svg-Instagram [size]="{width:30, height:30}"></svg-Instagram><svg-TikTok [size]="{width:30, height:30}"></svg-TikTok></li>
-        </ul>
+    <div class="contact-content">
+        <div class="contact-info">
+            <div class="contact-card">
+                <div class="contact-icon">📍</div>
+                <h3>Dirección</h3>
+                <p>Calle Castro de oro, 13<br>Madrid, España</p>
+            </div>
 
-    </section>
+            <div class="contact-card">
+                <div class="contact-icon">📞</div>
+                <h3>Teléfono</h3>
+                <p>+34 555 555 555<br>Disponible 24/7</p>
+            </div>
 
-    <section class="contact-img">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.893733596253!2d-3.731779323573459!3d40.389047757323056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4227939dd03ab7%3A0xff76381ff530f064!2sC.%20Castro%20de%20Oro%2C%2013%2C%20Carabanchel%2C%2028019%20Madrid!5e0!3m2!1ses!2ses!4v1760544810120!5m2!1ses!2ses" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </section>
+            <div class="contact-card">
+                <div class="contact-icon">✉️</div>
+                <h3>Email</h3>
+                <p>info@siennavet.com<br>Respuestas en 24h</p>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <form>
+                <div class="form-group">
+                    <label for="name">Nombre</label>
+                    <input type="text" id="name" placeholder="Tu nombre completo">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Tu email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="service">Servicio</label>
+                    <select id="service">
+                        <option value="">Selecciona un servicio</option>
+                        <option value="consulta">Consulta veterinaria</option>
+                        <option value="urgencia">Urgencia</option>
+                        <option value="veterinario">Visita veterinario</option>
+                        <option value="otros">Otros</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Mensaje</label>
+                    <textarea id="message" placeholder="Escribe tu mensaje aquí"></textarea>
+                </div>
+                
+                <button type="submit" class="submit-btn">Enviar Mensaje</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="contact-map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.893733596253!2d-3.731779323573459!3d40.389047757323056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4227939dd03ab7%3A0xff76381ff530f064!2sC.%20Castro%20de%20Oro%2C%2013%2C%20Carabanchel%2C%2028019%20Madrid!5e0!3m2!1ses!2ses!4v1760544810120!5m2!1ses!2ses" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
 </section>

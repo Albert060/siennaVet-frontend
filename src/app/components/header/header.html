@@ -1,13 +1,18 @@
 <header class="header-landing">
   <div class="logo"></div>
-  <div class="derecha">
+  <nav class="derecha">
     <div class="referen">
       <ul>
         <li><a href="#about">Sobre Nosotros</a></li>
-        <li><a href="#service">Servicio</a></li>
+        <li><a href="#services">Servicios</a></li>
         <li><a href="#contact">Contactanos</a></li>
       </ul>
     </div>
     <div class="Acceso"><button class="cta" (click)="redirectToLogin()">Login</button></div>
+  </nav>
+  <div class="mobile-menu-btn" (click)="toggleMobileMenu()">
+    <span class="hamburger"></span>
+    <span class="hamburger"></span>
+    <span class="hamburger"></span>
   </div>
 </header>
