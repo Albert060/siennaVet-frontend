@@ -4,6 +4,7 @@ import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Layout } from './components/layout/layout';
 
+
 export const routes: Routes = [
     { path: "", component: Landing },
     { path: "login", component: Login },

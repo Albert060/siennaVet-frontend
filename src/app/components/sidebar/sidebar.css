@@ -67,6 +67,42 @@
   font-size: 1rem;
 }
 
+.logout-container {
+  padding: 1rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.logout-button {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.logout-button .icon {
+  margin-right: 0.8rem;
+  font-size: 1.2rem;
+  width: 24px;
+}
+
+.logout-button .link-text {
+  font-size: 1rem;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     width: 70px;
@@ -80,5 +116,9 @@
     margin-right: 0;
     justify-content: center;
     width: 100%;
+  }
+  
+  .logout-button .link-text {
+    display: none;
   }
 }

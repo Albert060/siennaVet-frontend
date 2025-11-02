@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,5 +8,10 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './sidebar.css'
 })
 export class Sidebar {
+  constructor(private router: Router) {}
 
+  logout() {
+    // Here you can add any additional logout logic (like clearing tokens)
+    this.router.navigate(['/']);
+  }
 }

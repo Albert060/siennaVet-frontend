@@ -51,7 +51,7 @@ export class Dashboard implements OnInit {
   verFicha(ficha: FichaAnimales) {
     // Lógica para ver la ficha
     console.log('Ver ficha:', ficha);
-    // Aquí puedes redirigir a una página de detalle o abrir un modal
+  
   }
 
   mostrarEditarFicha(ficha: FichaAnimales) {
