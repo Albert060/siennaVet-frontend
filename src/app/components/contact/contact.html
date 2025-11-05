@@ -26,20 +26,20 @@
         </div>
 
         <div class="contact-form">
-            <form>
+            <form #contactForm="ngForm" (ngSubmit)="formContact(contactForm)">
                 <div class="form-group">
                     <label for="name">Nombre</label>
-                    <input type="text" id="name" placeholder="Tu nombre completo">
+                    <input type="text" id="name" ngModel name="name" placeholder="Tu nombre completo">
                 </div>
                 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Tu email">
+                    <input type="email" id="email" ngModel name="email" placeholder="Tu email">
                 </div>
                 
                 <div class="form-group">
                     <label for="service">Servicio</label>
-                    <select id="service">
+                    <select id="service" ngModel name="service">
                         <option value="">Selecciona un servicio</option>
                         <option value="consulta">Consulta veterinaria</option>
                         <option value="urgencia">Urgencia</option>
@@ -50,7 +50,7 @@
                 
                 <div class="form-group">
                     <label for="message">Mensaje</label>
-                    <textarea id="message" placeholder="Escribe tu mensaje aquí"></textarea>
+                    <textarea id="message" ngModel name="mensaje" placeholder="Escribe tu mensaje aquí"></textarea>
                 </div>
                 
                 <button type="submit" class="submit-btn">Enviar Mensaje</button>

@@ -11,7 +11,7 @@ export class Sidebar {
   constructor(private router: Router) {}
 
   logout() {
-    // Here you can add any additional logout logic (like clearing tokens)
+    localStorage.clear()
     this.router.navigate(['/']);
   }
 }
