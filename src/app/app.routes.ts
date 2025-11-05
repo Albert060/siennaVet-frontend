@@ -14,7 +14,8 @@ export const routes: Routes = [
         children: [
             { path: "", component: Dashboard },
             { path: "citas", loadComponent: () => import('./pages/citas/citas').then(m => m.Citas) },
-            { path: "vets", loadComponent: () => import('./pages/vets/vets').then(m => m.Vets) }
+            { path: "vets", loadComponent: () => import('./pages/vets/vets').then(m => m.Vets) },
+            { path: "clientes", loadComponent: () => import('./pages/clientes/clientes').then(m => m.Clientes) }
         ]
     }
 ];
