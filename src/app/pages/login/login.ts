@@ -43,4 +43,9 @@ export class Login {
       error: (error) => console.log(error),
     });
   }
+
+  volver() {
+    
+    this.router.navigate(['/']);
+  }
 }

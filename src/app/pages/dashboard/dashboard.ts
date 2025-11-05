@@ -13,9 +13,13 @@ import { Ficha, FichaAnimales } from '../../services/ficha';
 export class Dashboard implements OnInit {
   public error: null | string = null;
   public listaFichas: FichaAnimales[] = [];
+  public listaFichasFiltradas: FichaAnimales[] = [];
   public cargando: boolean = false;
   public showModal: boolean = false;
+  public showDetails: boolean = false;
+  public terminoBusqueda: string = '';
   public fichaEditando: FichaAnimales | null = null;
+  public fichaDetalles: FichaAnimales | null = null;
   public eliminarFicha: FichaAnimales | null = null;
 
   constructor(private service: Ficha) { }
@@ -38,6 +42,7 @@ export class Dashboard implements OnInit {
         }
 
         this.listaFichas = response;
+        this.listaFichasFiltradas = response; // Inicializar la lista filtrada con todas las fichas
         this.cargando = false
       },
       error: (error) => {
@@ -49,9 +54,31 @@ export class Dashboard implements OnInit {
   }
 
   verFicha(ficha: FichaAnimales) {
-    // Lógica para ver la ficha
-    console.log('Ver ficha:', ficha);
-  
+    this.fichaDetalles = ficha;
+    this.showDetails = true;
+  }
+
+  cerrarDetalles() {
+    this.showDetails = false;
+    this.fichaDetalles = null;
+  }
+
+  buscarFichas() {
+    if (!this.terminoBusqueda.trim()) {
+      // Si no hay término de búsqueda, mostrar todas las fichas
+      this.listaFichasFiltradas = [...this.listaFichas];
+    } else {
+      // Filtrar las fichas según el término de búsqueda
+      const termino = this.terminoBusqueda.toLowerCase().trim();
+      this.listaFichasFiltradas = this.listaFichas.filter(ficha => 
+        ficha.nombre.toLowerCase().includes(termino) ||
+        ficha.sexo.toLowerCase().includes(termino) ||
+        ficha.edad.toLowerCase().includes(termino) ||
+        ficha.peso.toLowerCase().includes(termino) ||
+        ficha.chip.toLowerCase().includes(termino) ||
+        ficha.raza.toLowerCase().includes(termino)
+      );
+    }
   }
 
   mostrarEditarFicha(ficha: FichaAnimales) {
