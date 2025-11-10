@@ -10,6 +10,7 @@ import { Cliente, ClienteI } from '../../services/cliente';
   styleUrl: './clientes.css'
 })
 export class Clientes implements OnInit {
+
   public error: null | string = null;
   public listaClientes: ClienteI[] = [];
   public listaClientesFiltrados: ClienteI[] = [];
@@ -69,7 +70,7 @@ export class Clientes implements OnInit {
     } else {
       // Filtrar los clientes según el término de búsqueda
       const termino = this.terminoBusqueda.toLowerCase().trim();
-      this.listaClientesFiltrados = this.listaClientes.filter(cliente => 
+      this.listaClientesFiltrados = this.listaClientes.filter(cliente =>
         cliente.nombre.toLowerCase().includes(termino) ||
         cliente.apellido.toLowerCase().includes(termino) ||
         cliente.dni.toLowerCase().includes(termino) ||
@@ -130,5 +131,17 @@ export class Clientes implements OnInit {
         }
       });
     }
+  }
+
+  crearNuevoCliente() {
+    this.clienteEditando = {
+      nombre: '',
+      apellido: '',
+      dni: '',
+      direccion: '',
+      telefono: '',
+      codigoPostal: ''
+    };
+    this.showModal = true;
   }
 }
