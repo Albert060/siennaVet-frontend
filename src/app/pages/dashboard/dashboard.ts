@@ -5,11 +5,11 @@ import { Ficha, FichaAnimales } from '../../services/ficha';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, NgIf, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: "./dashboard.html",
   styleUrls: ["./dashboard.css"]
 })
-  
+
 export class Dashboard implements OnInit {
   public error: null | string = null;
   public listaFichas: FichaAnimales[] = [];
@@ -70,7 +70,7 @@ export class Dashboard implements OnInit {
     } else {
       // Filtrar las fichas según el término de búsqueda
       const termino = this.terminoBusqueda.toLowerCase().trim();
-      this.listaFichasFiltradas = this.listaFichas.filter(ficha => 
+      this.listaFichasFiltradas = this.listaFichas.filter(ficha =>
         ficha.nombre.toLowerCase().includes(termino) ||
         ficha.sexo.toLowerCase().includes(termino) ||
         ficha.edad.toLowerCase().includes(termino) ||

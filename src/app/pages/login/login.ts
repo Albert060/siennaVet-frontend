@@ -6,14 +6,14 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule, NgIf],
+  imports: [FormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-  
+
 export class Login {
   public error: null | String = null;
-  
+
   constructor(private service: Auth, private router: Router) { }
 
   login(form: NgForm) {
@@ -45,7 +45,7 @@ export class Login {
   }
 
   volver() {
-    
+
     this.router.navigate(['/']);
   }
 }

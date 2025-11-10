@@ -5,7 +5,7 @@ import { Cliente, ClienteI } from '../../services/cliente';
 
 @Component({
   selector: 'app-clientes',
-  imports: [CommonModule, NgIf, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './clientes.html',
   styleUrl: './clientes.css'
 })

@@ -3,38 +3,42 @@
   <p>
     Gestión de clientes en SiennaVet. Aquí puedes ver, editar y eliminar los registros de clientes.
   </p>
-  
+
   <!-- Tabla para mostrar los clientes -->
   <div class="fichas-table-container">
     <div class="search-container">
       <h2>Registro de Clientes</h2>
       <div class="search-box">
-        <input 
-          type="text" 
-          placeholder="Buscar en todos los clientes..." 
-          [(ngModel)]="terminoBusqueda" 
-          (input)="buscarClientes()" 
-          class="search-input">
+        <input
+          type="text"
+          placeholder="Buscar en todos los clientes..."
+          [(ngModel)]="terminoBusqueda"
+          (input)="buscarClientes()"
+          class="search-input"
+        />
       </div>
     </div>
     <!-- Botón para crear nuevo veterinario -->
     <div class="create-btn-container">
       <button class="btn-crear" (click)="crearNuevoCliente()">Crear Nuevo Cliente</button>
     </div>
-    
+
     <!-- Mostrar mensaje de carga -->
-    <div *ngIf="cargando" class="loading">
-      Cargando clientes...
-    </div>
-    
+    @if (cargando) {
+      <div class="loading">Cargando clientes...</div>
+    }
+
     <!-- Mostrar mensaje de error -->
-    <div *ngIf="error != null" class="error">
-      {{ error }}
-    </div>
-    
+    @if (error != null) {
+      <div class="error">
+        {{ error }}
+      </div>
+    }
+
     <!-- Tabla de clientes -->
-    <table class="fichas-table" *ngIf="!cargando && !error">
-      <thead>
+    @if (!cargando && !error) {
+      <table class="fichas-table">
+        <thead>
         <tr>
           <th>ID</th>
           <th>Nombre</th>
@@ -45,116 +49,171 @@
           <th>Código Postal</th>
           <th>Acciones</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cliente of listaClientesFiltrados">
-          <td>{{ cliente.idCliente }}</td>
-          <td>{{ cliente.nombre }}</td>
-          <td>{{ cliente.apellido }}</td>
-          <td>{{ cliente.dni }}</td>
-          <td>{{ cliente.direccion }}</td>
-          <td>{{ cliente.telefono }}</td>
-          <td>{{ cliente.codigoPostal }}</td>
-          <td class="acciones-column">
-            <button class="btn-ver" (click)="verCliente(cliente)">Ver</button>
-            <button class="btn-editar" (click)="mostrarEditarCliente(cliente)">Editar</button>
-            <button class="btn-eliminar" (click)="mostrarEliminarCliente(cliente)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (cliente of listaClientesFiltrados; track cliente.idCliente) {
+            <tr>
+              <td>{{ cliente.idCliente }}</td>
+              <td>{{ cliente.nombre }}</td>
+              <td>{{ cliente.apellido }}</td>
+              <td>{{ cliente.dni }}</td>
+              <td>{{ cliente.direccion }}</td>
+              <td>{{ cliente.telefono }}</td>
+              <td>{{ cliente.codigoPostal }}</td>
+              <td class="acciones-column">
+                <button class="btn-ver" (click)="verCliente(cliente)">Ver</button>
+                <button class="btn-editar" (click)="mostrarEditarCliente(cliente)">Editar</button>
+                <button class="btn-eliminar" (click)="mostrarEliminarCliente(cliente)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   </div>
 
   <!-- Modal de edición de cliente -->
-  <div class="modal-overlay" *ngIf="showModal" (click)="cerrarModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Editar Cliente</h3>
-        <span class="close-btn" (click)="cerrarModal()">&times;</span>
-      </div>
-      <div class="modal-body" *ngIf="clienteEditando">
-        <form (ngSubmit)="guardarCliente()" #clienteForm="ngForm">
-          <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" [(ngModel)]="clienteEditando.nombre" name="nombre" class="form-control" required>
+  @if (showModal) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Editar Cliente</h3>
+          <span class="close-btn" (click)="cerrarModal()">&times;</span>
+        </div>
+        @if (clienteEditando) {
+          <div class="modal-body">
+            <form (ngSubmit)="guardarCliente()" #clienteForm="ngForm">
+              <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input
+                  type="text"
+                  id="nombre"
+                  [(ngModel)]="clienteEditando.nombre"
+                  name="nombre"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input
+                  type="text"
+                  id="apellido"
+                  [(ngModel)]="clienteEditando.apellido"
+                  name="apellido"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input
+                  type="text"
+                  id="dni"
+                  [(ngModel)]="clienteEditando.dni"
+                  name="dni"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="direccion">Dirección:</label>
+                <input
+                  type="text"
+                  id="direccion"
+                  [(ngModel)]="clienteEditando.direccion"
+                  name="direccion"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="telefono">Teléfono:</label>
+                <input
+                  type="text"
+                  id="telefono"
+                  [(ngModel)]="clienteEditando.telefono"
+                  name="telefono"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="codigoPostal">Código Postal:</label>
+                <input
+                  type="text"
+                  id="codigoPostal"
+                  [(ngModel)]="clienteEditando.codigoPostal"
+                  name="codigoPostal"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-guardar" [disabled]="!clienteForm.form.valid">
+                  Guardar
+                </button>
+              </div>
+            </form>
           </div>
-          
-          <div class="form-group">
-            <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" [(ngModel)]="clienteEditando.apellido" name="apellido" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="dni">DNI:</label>
-            <input type="text" id="dni" [(ngModel)]="clienteEditando.dni" name="dni" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="direccion">Dirección:</label>
-            <input type="text" id="direccion" [(ngModel)]="clienteEditando.direccion" name="direccion" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="telefono">Teléfono:</label>
-            <input type="text" id="telefono" [(ngModel)]="clienteEditando.telefono" name="telefono" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="codigoPostal">Código Postal:</label>
-            <input type="text" id="codigoPostal" [(ngModel)]="clienteEditando.codigoPostal" name="codigoPostal" class="form-control" required>
-          </div>
-          
-          <div class="modal-footer">
-            <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-            <button type="submit" class="btn-guardar" [disabled]="!clienteForm.form.valid">Guardar</button>
-          </div>
-        </form>
+        }
       </div>
     </div>
-  </div>
+  }
 
   <!-- Modal de visualización de detalles de cliente -->
-  <div class="modal-overlay" *ngIf="showDetails" (click)="cerrarDetalles()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Detalles del Cliente</h3>
-        <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
-      </div>
-      <div class="modal-body" *ngIf="clienteDetalles">
-        <div class="form-group">
-          <label for="nombre">Nombre:</label>
-          <div class="form-control-readonly">{{ clienteDetalles.nombre }}</div>
+  @if (showDetails) {
+    <div class="modal-overlay" (click)="cerrarDetalles()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Detalles del Cliente</h3>
+          <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
         </div>
-        
-        <div class="form-group">
-          <label for="apellido">Apellido:</label>
-          <div class="form-control-readonly">{{ clienteDetalles.apellido }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="dni">DNI:</label>
-          <div class="form-control-readonly">{{ clienteDetalles.dni }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="direccion">Dirección:</label>
-          <div class="form-control-readonly">{{ clienteDetalles.direccion }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="telefono">Teléfono:</label>
-          <div class="form-control-readonly">{{ clienteDetalles.telefono }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="codigoPostal">Código Postal:</label>
-          <div class="form-control-readonly">{{ clienteDetalles.codigoPostal }}</div>
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
-        </div>
+        @if (clienteDetalles) {
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <div class="form-control-readonly">{{ clienteDetalles.nombre }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="apellido">Apellido:</label>
+              <div class="form-control-readonly">{{ clienteDetalles.apellido }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="dni">DNI:</label>
+              <div class="form-control-readonly">{{ clienteDetalles.dni }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="direccion">Dirección:</label>
+              <div class="form-control-readonly">{{ clienteDetalles.direccion }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefono">Teléfono:</label>
+              <div class="form-control-readonly">{{ clienteDetalles.telefono }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="codigoPostal">Código Postal:</label>
+              <div class="form-control-readonly">{{ clienteDetalles.codigoPostal }}</div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
+            </div>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>

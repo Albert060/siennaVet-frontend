@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { Raza, RazaI } from '../../services/raza';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-razas',
-  imports: [CommonModule, NgIf, FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './razas.html',
   styleUrl: './razas.css'
 })

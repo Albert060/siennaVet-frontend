@@ -3,39 +3,44 @@
   <p>
     Bienvenido al panel de veterinarios de SiennaVet. Aquí puedes gestionar la información de los veterinarios.
   </p>
-  
+
   <!-- Tabla para mostrar los veterinarios -->
   <div class="fichas-table-container">
     <div class="search-container">
       <h2>Registro de Veterinarios</h2>
       <div class="search-box">
-        <input 
-          type="text" 
-          placeholder="Buscar en todos los veterinarios..." 
-          [(ngModel)]="terminoBusqueda" 
-          (input)="buscarVeterinarios()" 
+        <input
+          type="text"
+          placeholder="Buscar en todos los veterinarios..."
+          [(ngModel)]="terminoBusqueda"
+          (input)="buscarVeterinarios()"
           class="search-input">
       </div>
     </div>
-    
+
     <!-- Botón para crear nuevo veterinario -->
     <div class="create-btn-container">
       <button class="btn-crear" (click)="crearNuevoVeterinario()">Crear Nuevo Veterinario</button>
     </div>
-    
+
     <!-- Mostrar mensaje de carga -->
-    <div *ngIf="cargando" class="loading">
-      Cargando veterinarios...
-    </div>
-    
+    @if (cargando) {
+      <div class="loading">
+        Cargando veterinarios...
+      </div>
+    }
+
     <!-- Mostrar mensaje de error -->
-    <div *ngIf="error != null" class="error">
-      {{ error }}
-    </div>
-    
+    @if (error != null) {
+      <div class="error">
+        {{ error }}
+      </div>
+    }
+
     <!-- Tabla de veterinarios -->
-    <table class="fichas-table" *ngIf="!cargando && !error">
-      <thead>
+    @if (!cargando && !error) {
+      <table class="fichas-table">
+        <thead>
         <tr>
           <th>ID</th>
           <th>Nombre</th>
@@ -48,149 +53,169 @@
           <th>Fecha</th>
           <th>Acciones</th>
         </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let veterinario of listaVeterinariosFiltrados">
-          <td>{{ veterinario.idVet }}</td>
-          <td>{{ veterinario.nombre }}</td>
-          <td>{{ veterinario.apellido }}</td>
-          <td>{{ veterinario.dni }}</td>
-          <td>{{ veterinario.sexo }}</td>
-          <td>{{ veterinario.numColegiado }}</td>
-          <td>{{ veterinario.email }}</td>
-          <td>{{ veterinario.telefono }}</td>
-          <td>{{ veterinario.fechaInicio }}</td>
-          <td class="acciones-column">
-            <button class="btn-ver" (click)="verVeterinario(veterinario)">Ver</button>
-            <button class="btn-editar" (click)="mostrarEditarVeterinario(veterinario)">Editar</button>
-            <button class="btn-eliminar" (click)="mostrarEliminarVeterinario(veterinario)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (veterinario of listaVeterinariosFiltrados; track veterinario.idVet) {
+            <tr>
+              <td>{{ veterinario.idVet }}</td>
+              <td>{{ veterinario.nombre }}</td>
+              <td>{{ veterinario.apellido }}</td>
+              <td>{{ veterinario.dni }}</td>
+              <td>{{ veterinario.sexo }}</td>
+              <td>{{ veterinario.numColegiado }}</td>
+              <td>{{ veterinario.email }}</td>
+              <td>{{ veterinario.telefono }}</td>
+              <td>{{ veterinario.fechaInicio }}</td>
+              <td class="acciones-column">
+                <button class="btn-ver" (click)="verVeterinario(veterinario)">Ver</button>
+                <button class="btn-editar" (click)="mostrarEditarVeterinario(veterinario)">Editar</button>
+                <button class="btn-eliminar" (click)="mostrarEliminarVeterinario(veterinario)">Eliminar</button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   </div>
 
   <!-- Modal de edición/creación de veterinario -->
-  <div class="modal-overlay" *ngIf="showModal" (click)="cerrarModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>{{ veterinarioEditando?.idVet ? 'Editar Veterinario' : 'Crear Nuevo Veterinario' }}</h3>
-        <span class="close-btn" (click)="cerrarModal()">&times;</span>
-      </div>
-      <div class="modal-body" *ngIf="veterinarioEditando">
-        <form (ngSubmit)="guardarVeterinario()" #veterinarioForm="ngForm">
-          <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" [(ngModel)]="veterinarioEditando.nombre" name="nombre" class="form-control" required>
+  @if (showModal) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>{{ veterinarioEditando?.idVet ? 'Editar Veterinario' : 'Crear Nuevo Veterinario' }}</h3>
+          <span class="close-btn" (click)="cerrarModal()">&times;</span>
+        </div>
+        @if (veterinarioEditando) {
+          <div class="modal-body">
+            <form (ngSubmit)="guardarVeterinario()" #veterinarioForm="ngForm">
+              <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" [(ngModel)]="veterinarioEditando.nombre" name="nombre"
+                       class="form-control"
+                       required>
+              </div>
+
+              <div class="form-group">
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" [(ngModel)]="veterinarioEditando.apellido" name="apellido"
+                       class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" [(ngModel)]="veterinarioEditando.dni" name="dni" class="form-control"
+                       required>
+              </div>
+
+              <div class="form-group">
+                <label for="sexo">Sexo:</label>
+                <select id="sexo" [(ngModel)]="veterinarioEditando.sexo" name="sexo" class="form-control" required>
+                  <option value="">Seleccionar sexo</option>
+                  <option value="Masculino">Masculino</option>
+                  <option value="Femenino">Femenino</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="numColegiado">Número Colegiado:</label>
+                <input type="text" id="numColegiado" [(ngModel)]="veterinarioEditando.numColegiado" name="numColegiado"
+                       class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" [(ngModel)]="veterinarioEditando.email" name="email" class="form-control"
+                       required>
+              </div>
+
+              <div class="form-group">
+                <label for="contrasena">Contraseña:</label>
+                <input type="password" id="contrasena" [(ngModel)]="veterinarioEditando.contrasena" name="contrasena"
+                       class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="telefono">Teléfono:</label>
+                <input type="text" id="telefono" [(ngModel)]="veterinarioEditando.telefono" name="telefono"
+                       class="form-control" required>
+              </div>
+
+              <div class="form-group">
+                <label for="fechaInicio">Fecha Inicio:</label>
+                <input type="date" id="fechaInicio" [(ngModel)]="veterinarioEditando.fechaInicio" name="fechaInicio"
+                       class="form-control" required>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-guardar" [disabled]="!veterinarioForm.form.valid">Guardar</button>
+              </div>
+            </form>
           </div>
-          
-          <div class="form-group">
-            <label for="apellido">Apellido:</label>
-            <input type="text" id="apellido" [(ngModel)]="veterinarioEditando.apellido" name="apellido" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="dni">DNI:</label>
-            <input type="text" id="dni" [(ngModel)]="veterinarioEditando.dni" name="dni" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="sexo">Sexo:</label>
-            <select id="sexo" [(ngModel)]="veterinarioEditando.sexo" name="sexo" class="form-control" required>
-              <option value="">Seleccionar sexo</option>
-              <option value="Masculino">Masculino</option>
-              <option value="Femenino">Femenino</option>
-              <option value="Otro">Otro</option>
-            </select>
-          </div>
-          
-          <div class="form-group">
-            <label for="numColegiado">Número Colegiado:</label>
-            <input type="text" id="numColegiado" [(ngModel)]="veterinarioEditando.numColegiado" name="numColegiado" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" [(ngModel)]="veterinarioEditando.email" name="email" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="contrasena">Contraseña:</label>
-            <input type="password" id="contrasena" [(ngModel)]="veterinarioEditando.contrasena" name="contrasena" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="telefono">Teléfono:</label>
-            <input type="text" id="telefono" [(ngModel)]="veterinarioEditando.telefono" name="telefono" class="form-control" required>
-          </div>
-          
-          <div class="form-group">
-            <label for="fechaInicio">Fecha Inicio:</label>
-            <input type="date" id="fechaInicio" [(ngModel)]="veterinarioEditando.fechaInicio" name="fechaInicio" class="form-control" required>
-          </div>
-          
-          <div class="modal-footer">
-            <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-            <button type="submit" class="btn-guardar" [disabled]="!veterinarioForm.form.valid">Guardar</button>
-          </div>
-        </form>
+        }
       </div>
     </div>
-  </div>
+  }
 
   <!-- Modal de visualización de detalles de veterinario -->
-  <div class="modal-overlay" *ngIf="showDetails" (click)="cerrarDetalles()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h3>Detalles del Veterinario</h3>
-        <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
-      </div>
-      <div class="modal-body" *ngIf="veterinarioDetalles">
-        <div class="form-group">
-          <label for="nombre">Nombre:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.nombre }}</div>
+  @if (showDetails) {
+    <div class="modal-overlay" (click)="cerrarDetalles()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Detalles del Veterinario</h3>
+          <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
         </div>
-        
-        <div class="form-group">
-          <label for="apellido">Apellido:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.apellido }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="dni">DNI:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.dni }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="sexo">Sexo:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.sexo }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="numColegiado">Número Colegiado:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.numColegiado }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="email">Email:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.email }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="telefono">Teléfono:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.telefono }}</div>
-        </div>
-        
-        <div class="form-group">
-          <label for="fechaInicio">Fecha Inicio:</label>
-          <div class="form-control-readonly">{{ veterinarioDetalles.fechaInicio }}</div>
-        </div>
-        
-        <div class="modal-footer">
-          <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
-        </div>
+        @if (veterinarioDetalles) {
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.nombre }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="apellido">Apellido:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.apellido }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="dni">DNI:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.dni }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="sexo">Sexo:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.sexo }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="numColegiado">Número Colegiado:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.numColegiado }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.email }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="telefono">Teléfono:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.telefono }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="fechaInicio">Fecha Inicio:</label>
+              <div class="form-control-readonly">{{ veterinarioDetalles.fechaInicio }}</div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
+            </div>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>
 

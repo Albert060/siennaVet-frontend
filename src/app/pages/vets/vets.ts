@@ -5,7 +5,7 @@ import { Veterinario, VeterinarioI } from '../../services/veterinario';
 
 @Component({
     selector: 'app-vets',
-    imports: [CommonModule, NgIf, FormsModule],
+    imports: [CommonModule, FormsModule],
     templateUrl: './vets.html',
     styleUrl: './vets.css'
 })
