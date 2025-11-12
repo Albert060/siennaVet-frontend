@@ -1,5 +1,218 @@
 <div class="citas-container">
-  <h1>Gestión de Citas</h1>
-  <p>Esta es la página de gestión de citas veterinarias.</p>
-  <!-- Aquí iría el contenido específico de la gestión de citas -->
+  <div class="calendar-header">
+    <h1>Calendario de Citas</h1>
+    <div class="calendar-controls">
+      <button class="btn-crear" (click)="abrirModalCrear()">Crear Nueva Cita</button>
+      <div class="month-navigation">
+        <button (click)="cambiarMes(-1)">&lt;</button>
+        <h2>{{ mesActual | date:'MMMM yyyy' }}</h2>
+        <button (click)="cambiarMes(1)">&gt;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-container">
+    <input
+      type="text"
+      placeholder="Buscar citas..."
+      [(ngModel)]="terminoBusqueda"
+      (input)="buscarCitas()"
+      class="search-input">
+  </div>
+
+  <!-- Mostrar mensaje de carga -->
+  @if (cargando) {
+    <div class="loading">
+      Cargando citas...
+    </div>
+  }
+
+  <!-- Mostrar mensaje de error -->
+  @if (error != null) {
+    <div class="error">
+      {{ error }}
+    </div>
+  }
+
+  <!-- Vista de calendario -->
+  @if (!cargando && !error) {
+    <div class="calendar">
+      <div class="calendar-weekdays">
+        <div class="weekday">Dom</div>
+        <div class="weekday">Lun</div>
+        <div class="weekday">Mar</div>
+        <div class="weekday">Mié</div>
+        <div class="weekday">Jue</div>
+        <div class="weekday">Vie</div>
+        <div class="weekday">Sáb</div>
+      </div>
+      <div class="calendar-grid">
+        @for (day of diasCalendario; track $index) {
+          @if (day) {
+            <div 
+              class="calendar-day" 
+              [class.today]="esHoy(day)" 
+              [class.other-month]="!esMesActual(day)"
+              (click)="onDayClick(day)"
+            >
+              <div class="day-number">{{ day.getDate() }}</div>
+              <div class="day-appointments">
+                @for (cita of getCitasDelDia(day); track cita.idCita; let i = $index) {
+                  @if (i < 3) { <!-- Mostrar máximo 3 citas por día -->
+                    <div 
+                      class="appointment-badge" 
+                      [style.backgroundColor]="'var(--principal)'"
+                      (click)="verCitas(cita); $event.stopPropagation()"
+                    >
+                      {{ cita.hora }} - {{ cita.detalles }}
+                    </div>
+                  }
+                }
+                @if (getCitasDelDia(day).length > 3) {
+                  <div class="more-appointments">
+                    +{{ getCitasDelDia(day).length - 3 }} más
+                  </div>
+                }
+              </div>
+            </div>
+          } @else {
+            <div class="calendar-day empty"></div>
+          }
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Modal para ver detalles de cita -->
+  @if (showDetails) {
+    <div class="modal-overlay" (click)="cerrarDetalles()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Detalles de la Cita</h3>
+          <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
+        </div>
+        @if (citasDetalles) {
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Fecha:</label>
+              <div class="form-control-readonly">{{ citasDetalles.fecha }}</div>
+            </div>
+
+            <div class="form-group">
+              <label>Hora:</label>
+              <div class="form-control-readonly">{{ citasDetalles.hora }}</div>
+            </div>
+
+            <div class="form-group">
+              <label>Detalles:</label>
+              <div class="form-control-readonly">{{ citasDetalles.detalles }}</div>
+            </div>
+
+            <div class="form-group">
+              <label>Ficha (Animal):</label>
+              <div class="form-control-readonly">{{ getNombreFicha(citasDetalles.idFicha || 0) }}</div>
+            </div>
+
+            <div class="form-group">
+              <label>Veterinario:</label>
+              <div class="form-control-readonly">{{ getNombreVet(citasDetalles.idVet || 0) }}</div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Modal para crear/editar cita -->
+  @if (showModal) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>{{ citasEditando && citasEditando.idCita ? 'Editar Cita' : 'Crear Nueva Cita' }}</h3>
+          <span class="close-btn" (click)="cerrarModal()">&times;</span>
+        </div>
+        @if (citasEditando) {
+          <div class="modal-body">
+            <form (ngSubmit)="guardarCitas()" #citaForm="ngForm">
+              <div class="form-group">
+                <label for="fecha">Fecha:</label>
+                <input 
+                  type="date" 
+                  id="fecha" 
+                  [(ngModel)]="citasEditando.fecha" 
+                  name="fecha" 
+                  class="form-control" 
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="hora">Hora:</label>
+                <input 
+                  type="time" 
+                  id="hora" 
+                  [(ngModel)]="citasEditando.hora" 
+                  name="hora" 
+                  class="form-control" 
+                  required
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="detalles">Detalles:</label>
+                <textarea 
+                  id="detalles" 
+                  [(ngModel)]="citasEditando.detalles" 
+                  name="detalles" 
+                  class="form-control" 
+                  required
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="idFicha">Ficha (Animal):</label>
+                <select 
+                  id="idFicha" 
+                  [(ngModel)]="citasEditando.idFicha" 
+                  name="idFicha" 
+                  class="form-control" 
+                  required
+                >
+                  <option value="">Selecciona una ficha</option>
+                  @for (ficha of fichasDisponibles; track ficha.idFicha) {
+                    <option [value]="ficha.idFicha">{{ ficha.nombre }} ({{ getNombreClienteFicha(ficha.idCliente) }})</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="idVet">Veterinario:</label>
+                <select 
+                  id="idVet" 
+                  [(ngModel)]="citasEditando.idVet" 
+                  name="idVet" 
+                  class="form-control" 
+                  required
+                >
+                  <option value="">Selecciona un veterinario</option>
+                  @for (vet of vetsDisponibles; track vet.idVet) {
+                    <option [value]="vet.idVet">{{ vet.nombre }} {{ vet.apellido }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-guardar" [disabled]="!citaForm.form.valid">Guardar</button>
+              </div>
+            </form>
+          </div>
+        }
+      </div>
+    </div>
+  }
 </div>

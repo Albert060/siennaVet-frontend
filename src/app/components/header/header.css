@@ -1,5 +1,4 @@
 .header-landing {
-  width: 100%;
   background-color: var(--fondo);
   margin: 20px;
   display: flex;
@@ -112,11 +111,11 @@
   .referen, .cta {
     display: none;
   }
-  
+
   .mobile-menu-btn {
     display: flex;
   }
-  
+
   .derecha {
     position: relative;
   }

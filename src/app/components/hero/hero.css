@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   max-width: 1200px;
-  margin: 40px auto;
+  margin: auto;
   justify-content: space-between;
   padding: 0 20px;
   gap: 40px;
@@ -36,7 +36,6 @@
   gap: 20px;
   flex: 1;
   min-width: 0;
-  padding-top: 40px;
 }
 
 .hero-badge {
@@ -151,31 +150,31 @@
     padding: 0 15px;
     min-height: auto;
   }
-  
+
   .Section-Descripcion {
     align-items: center;
     padding-top: 0;
   }
-  
+
   .Section-Descripcion h1 {
     font-size: 2.2rem;
   }
-  
+
   .hero-buttons {
     flex-direction: column;
     width: 100%;
     max-width: 300px;
   }
-  
+
   .cta-button, .secondary-button {
     width: 100%;
   }
-  
+
   .Section-Img img {
     max-width: 100%;
     height: auto;
   }
-  
+
   .contact-info {
     align-items: center;
   }

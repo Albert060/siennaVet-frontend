@@ -110,7 +110,7 @@ p {
   white-space: nowrap;
 }
 
-.btn-ver, .btn-editar, .btn-eliminar {
+.btn-crear, .btn-ver, .btn-editar, .btn-eliminar {
   margin: 0 0.25rem;
   padding: 0.5rem 0.75rem;
   border: none;
@@ -118,6 +118,15 @@ p {
   cursor: pointer;
   font-size: 0.875rem;
   transition: background-color 0.3s;
+}
+
+.btn-crear {
+  background-color: var(--principal, #5585b5);
+  color: white;
+}
+
+.btn-crear:hover {
+  background-color: #426a95;
 }
 
 .btn-ver {

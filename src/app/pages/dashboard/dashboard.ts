@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Ficha, FichaAnimales } from '../../services/ficha';
+import {Raza, RazaI} from '../../services/raza';
+import {Cliente, ClienteI} from '../../services/cliente';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,11 +23,27 @@ export class Dashboard implements OnInit {
   public fichaEditando: FichaAnimales | null = null;
   public fichaDetalles: FichaAnimales | null = null;
   public eliminarFicha: FichaAnimales | null = null;
+  public razasDisponibles: RazaI[] = [];
+  public clientesDisponibles: ClienteI[] = [];
+  public esCreacion: boolean = false; // Flag to determine if we're creating or editing
 
-  constructor(private service: Ficha) { }
+  constructor(private service: Ficha, private razaService: Raza, private clienteService: Cliente) { }
 
   ngOnInit() {
     this.cargando = true
+
+    // Load available breeds and clients
+    this.razaService.listarRaza().subscribe({
+      next: (response) => {
+        this.razasDisponibles = response;
+      }
+    });
+
+    this.clienteService.listarCliente().subscribe({
+      next: (response) => {
+        this.clientesDisponibles = response;
+      }
+    });
 
     this.service.listarFicha().subscribe({
       next: (response) => {
@@ -76,14 +94,58 @@ export class Dashboard implements OnInit {
         ficha.edad.toLowerCase().includes(termino) ||
         ficha.peso.toLowerCase().includes(termino) ||
         ficha.chip.toLowerCase().includes(termino) ||
-        ficha.raza.toLowerCase().includes(termino)
+        this.getNombreRazaTabla(ficha.idRaza).toLowerCase().includes(termino) ||
+        this.getNombreClienteTabla(ficha.idCliente).toLowerCase().includes(termino)
       );
     }
   }
 
+  crearNuevaFicha() {
+    this.esCreacion = true;
+    // Initialize a new empty ficha object
+    this.fichaEditando = {
+      nombre: '',
+      sexo: 'Macho', // Default value
+      edad: '',
+      peso: '',
+      chip: '',
+      raza: '', // This will be derived from idRaza
+      idRaza: 0,
+      idCliente: 0
+    };
+    this.showModal = true;
+
+    // Load available breeds and clients
+    this.razaService.listarRaza().subscribe({
+      next: (response) => {
+        this.razasDisponibles = response;
+      }
+    });
+
+    this.clienteService.listarCliente().subscribe({
+      next: (response) => {
+        this.clientesDisponibles = response;
+      }
+    });
+  }
+
   mostrarEditarFicha(ficha: FichaAnimales) {
+    this.esCreacion = false;
     this.fichaEditando = ficha;
     this.showModal = true;
+
+    // Load available breeds and clients
+    this.razaService.listarRaza().subscribe({
+      next: (response) => {
+        this.razasDisponibles = response;
+      }
+    });
+
+    this.clienteService.listarCliente().subscribe({
+      next: (response) => {
+        this.clientesDisponibles = response;
+      }
+    });
   }
 
   cerrarModal() {
@@ -93,9 +155,28 @@ export class Dashboard implements OnInit {
 
   guardarFicha() {
     if (this.fichaEditando) {
-      this.editarFicha(this.fichaEditando);
+      if (this.esCreacion) {
+        this.crearFicha(this.fichaEditando);
+      } else {
+        this.editarFicha(this.fichaEditando);
+      }
       this.cerrarModal();
     }
+  }
+
+  crearFicha(nuevaFicha: FichaAnimales) {
+    this.service.crearFicha(nuevaFicha).subscribe({
+      next: (response) => {
+        console.log('Ficha creada:', response);
+        // Add the new ficha to the list
+        this.listaFichas.push(response);
+        this.listaFichasFiltradas.push(response);
+      },
+      error: (error) => {
+        console.error('Error al crear la ficha:', error);
+        this.error = 'Error al crear la ficha';
+      }
+    });
   }
 
   editarFicha(fichaEditada: FichaAnimales) {
@@ -124,5 +205,33 @@ export class Dashboard implements OnInit {
         }
       });
     }
+  }
+
+  getNombreRaza(idRaza: number): string {
+    const raza = this.razasDisponibles.find(r => r.idRaza === idRaza);
+    return raza ? raza.nombre : 'Raza no encontrada';
+  }
+
+  getNombreCliente(idCliente: number): string {
+    const cliente = this.clientesDisponibles.find(c => c.idCliente === idCliente);
+    return cliente ? cliente.nombre + ' ' + cliente.apellido : 'Cliente no encontrado';
+  }
+
+  getNombreRazaTabla(idRaza: number): string {
+    if (this.razasDisponibles.length === 0) {
+      // If razas haven't been loaded yet, return a placeholder
+      return 'Cargando...';
+    }
+    const raza = this.razasDisponibles.find(r => r.idRaza === idRaza);
+    return raza ? raza.nombre : 'Raza no encontrada';
+  }
+
+  getNombreClienteTabla(idCliente: number): string {
+    if (this.clientesDisponibles.length === 0) {
+      // If clientes haven't been loaded yet, return a placeholder
+      return 'Cargando...';
+    }
+    const cliente = this.clientesDisponibles.find(c => c.idCliente === idCliente);
+    return cliente ? cliente.nombre + ' ' + cliente.apellido : 'Cliente no encontrado';
   }
 }

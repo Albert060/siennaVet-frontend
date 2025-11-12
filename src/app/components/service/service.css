@@ -122,20 +122,20 @@
   .services-container {
     padding: 0 15px;
   }
-  
+
   .section-title {
     font-size: 2rem;
   }
-  
+
   .section-subtitle {
     font-size: 1rem;
   }
-  
+
   .services-grid {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  
+
   .service-card {
     padding: 25px 20px;
   }

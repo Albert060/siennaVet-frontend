@@ -27,7 +27,7 @@
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 40px;
+    width: 79px;
     height: 3px;
     background-color: var(--principal);
     border-radius: 2px;
@@ -121,11 +121,11 @@
         grid-template-columns: 1fr;
         gap: 40px;
     }
-    
+
     .footer {
         padding: 40px 20px 20px;
     }
-    
+
     .footer-bottom {
         text-align: center;
     }

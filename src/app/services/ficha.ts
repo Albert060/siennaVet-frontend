@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface FichaAnimales{
-  idFicha: number;
+  idFicha?: number;
   nombre: string;
   sexo: string;
   edad: string;
@@ -27,6 +27,10 @@ export class Ficha {
 
   editarFicha(editarFicha: FichaAnimales) {
     return this.http.put<FichaAnimales>(this.endpoint, editarFicha)
+  }
+
+  crearFicha(crearFicha: FichaAnimales) {
+    return this.http.post<FichaAnimales>(this.endpoint, crearFicha)
   }
 
   eliminarFicha(eliminarFicha: FichaAnimales) {

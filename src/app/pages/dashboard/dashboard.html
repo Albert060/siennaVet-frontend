@@ -33,6 +33,11 @@
       </div>
     }
 
+    <!-- Botón para crear nueva ficha -->
+    <div class="create-btn-container">
+      <button class="btn-crear" (click)="crearNuevaFicha()">Crear Nueva Ficha</button>
+    </div>
+
     <!-- Tabla de fichas -->
     @if (!cargando && !error) {
       <table class="fichas-table">
@@ -45,6 +50,7 @@
           <th>Peso</th>
           <th>Chip</th>
           <th>Raza</th>
+          <th>Cliente</th>
           <th>Acciones</th>
         </tr>
         </thead>
@@ -57,7 +63,8 @@
               <td>{{ ficha.edad }}</td>
               <td>{{ ficha.peso }}</td>
               <td>{{ ficha.chip }}</td>
-              <td>{{ ficha.raza }}</td>
+              <td>{{ getNombreRazaTabla(ficha.idRaza) }}</td>
+              <td>{{ getNombreClienteTabla(ficha.idCliente) }}</td>
               <td class="acciones-column">
                 <button class="btn-ver" (click)="verFicha(ficha)">Ver</button>
                 <button class="btn-editar" (click)="mostrarEditarFicha(ficha)">Editar</button>
@@ -75,7 +82,7 @@
     <div class="modal-overlay" (click)="cerrarModal()">
       <div class="modal-content" (click)="$event.stopPropagation()">
         <div class="modal-header">
-          <h3>Editar Ficha</h3>
+          <h3>{{ esCreacion ? 'Crear Nueva Ficha' : 'Editar Ficha' }}</h3>
           <span class="close-btn" (click)="cerrarModal()">&times;</span>
         </div>
         @if (fichaEditando) {
@@ -112,7 +119,20 @@
 
               <div class="form-group">
                 <label for="raza">Raza:</label>
-                <input type="text" id="raza" [(ngModel)]="fichaEditando.raza" name="raza" class="form-control" required>
+                <select id="raza" [(ngModel)]="fichaEditando.idRaza" name="idRaza" class="form-control" required>
+                  @for (raza of razasDisponibles; track raza.idRaza) {
+                    <option [value]="raza.idRaza">{{ raza.nombre }}</option>
+                  }
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="cliente">Cliente:</label>
+                <select id="cliente" [(ngModel)]="fichaEditando.idCliente" name="idCliente" class="form-control" required>
+                  @for (cliente of clientesDisponibles; track cliente.idCliente) {
+                    <option [value]="cliente.idCliente">{{ cliente.nombre }} {{ cliente.apellido }}</option>
+                  }
+                </select>
               </div>
 
               <div class="modal-footer">
@@ -163,7 +183,12 @@
 
             <div class="form-group">
               <label for="raza">Raza:</label>
-              <div class="form-control-readonly">{{ fichaDetalles.raza }}</div>
+              <div class="form-control-readonly">{{ getNombreRaza(fichaDetalles.idRaza) }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="cliente">Cliente:</label>
+              <div class="form-control-readonly">{{ getNombreCliente(fichaDetalles.idCliente) }}</div>
             </div>
 
             <div class="modal-footer">
