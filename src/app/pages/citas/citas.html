@@ -49,9 +49,9 @@
       <div class="calendar-grid">
         @for (day of diasCalendario; track $index) {
           @if (day) {
-            <div 
-              class="calendar-day" 
-              [class.today]="esHoy(day)" 
+            <div
+              class="calendar-day"
+              [class.today]="esHoy(day)"
               [class.other-month]="!esMesActual(day)"
               (click)="onDayClick(day)"
             >
@@ -59,8 +59,8 @@
               <div class="day-appointments">
                 @for (cita of getCitasDelDia(day); track cita.idCita; let i = $index) {
                   @if (i < 3) { <!-- Mostrar máximo 3 citas por día -->
-                    <div 
-                      class="appointment-badge" 
+                    <div
+                      class="appointment-badge"
                       [style.backgroundColor]="'var(--principal)'"
                       (click)="verCitas(cita); $event.stopPropagation()"
                     >
@@ -140,46 +140,46 @@
             <form (ngSubmit)="guardarCitas()" #citaForm="ngForm">
               <div class="form-group">
                 <label for="fecha">Fecha:</label>
-                <input 
-                  type="date" 
-                  id="fecha" 
-                  [(ngModel)]="citasEditando.fecha" 
-                  name="fecha" 
-                  class="form-control" 
+                <input
+                  type="date"
+                  id="fecha"
+                  [(ngModel)]="citasEditando.fecha"
+                  name="fecha"
+                  class="form-control"
                   required
                 >
               </div>
 
               <div class="form-group">
                 <label for="hora">Hora:</label>
-                <input 
-                  type="time" 
-                  id="hora" 
-                  [(ngModel)]="citasEditando.hora" 
-                  name="hora" 
-                  class="form-control" 
+                <input
+                  type="time"
+                  id="hora"
+                  [(ngModel)]="citasEditando.hora"
+                  name="hora"
+                  class="form-control"
                   required
                 >
               </div>
 
               <div class="form-group">
                 <label for="detalles">Detalles:</label>
-                <textarea 
-                  id="detalles" 
-                  [(ngModel)]="citasEditando.detalles" 
-                  name="detalles" 
-                  class="form-control" 
+                <textarea
+                  id="detalles"
+                  [(ngModel)]="citasEditando.detalles"
+                  name="detalles"
+                  class="form-control"
                   required
                 ></textarea>
               </div>
 
               <div class="form-group">
                 <label for="idFicha">Ficha (Animal):</label>
-                <select 
-                  id="idFicha" 
-                  [(ngModel)]="citasEditando.idFicha" 
-                  name="idFicha" 
-                  class="form-control" 
+                <select
+                  id="idFicha"
+                  [(ngModel)]="citasEditando.idFicha"
+                  name="idFicha"
+                  class="form-control"
                   required
                 >
                   <option value="">Selecciona una ficha</option>
@@ -191,11 +191,11 @@
 
               <div class="form-group">
                 <label for="idVet">Veterinario:</label>
-                <select 
-                  id="idVet" 
-                  [(ngModel)]="citasEditando.idVet" 
-                  name="idVet" 
-                  class="form-control" 
+                <select
+                  id="idVet"
+                  [(ngModel)]="citasEditando.idVet"
+                  name="idVet"
+                  class="form-control"
                   required
                 >
                   <option value="">Selecciona un veterinario</option>

@@ -94,8 +94,8 @@ export class Dashboard implements OnInit {
         ficha.edad.toLowerCase().includes(termino) ||
         ficha.peso.toLowerCase().includes(termino) ||
         ficha.chip.toLowerCase().includes(termino) ||
-        this.getNombreRazaTabla(ficha.idRaza).toLowerCase().includes(termino) ||
-        this.getNombreClienteTabla(ficha.idCliente).toLowerCase().includes(termino)
+        this.getNombreRaza(ficha.idRaza).toLowerCase().includes(termino) ||
+        this.getNombreCliente(ficha.idCliente).toLowerCase().includes(termino)
       );
     }
   }
@@ -208,16 +208,6 @@ export class Dashboard implements OnInit {
   }
 
   getNombreRaza(idRaza: number): string {
-    const raza = this.razasDisponibles.find(r => r.idRaza === idRaza);
-    return raza ? raza.nombre : 'Raza no encontrada';
-  }
-
-  getNombreCliente(idCliente: number): string {
-    const cliente = this.clientesDisponibles.find(c => c.idCliente === idCliente);
-    return cliente ? cliente.nombre + ' ' + cliente.apellido : 'Cliente no encontrado';
-  }
-
-  getNombreRazaTabla(idRaza: number): string {
     if (this.razasDisponibles.length === 0) {
       // If razas haven't been loaded yet, return a placeholder
       return 'Cargando...';
@@ -226,7 +216,7 @@ export class Dashboard implements OnInit {
     return raza ? raza.nombre : 'Raza no encontrada';
   }
 
-  getNombreClienteTabla(idCliente: number): string {
+  getNombreCliente(idCliente: number): string {
     if (this.clientesDisponibles.length === 0) {
       // If clientes haven't been loaded yet, return a placeholder
       return 'Cargando...';

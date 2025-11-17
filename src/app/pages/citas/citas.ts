@@ -117,15 +117,6 @@ export class Citas implements OnInit {
     }
   }
 
-  crearNuevaCita() {
-    this.citasEditando = {
-      fecha: '',
-      detalles: '',
-      hora: ''
-    };
-    this.showModal = true;
-  }
-
   ngOnInit() {
     this.cargando = true;
 
@@ -218,10 +209,12 @@ export class Citas implements OnInit {
   }
 
   getCitasDelDia(dia: Date): CitaI[] {
-    if (!this.listarCitas) return [];
+    if (!this.listaCitasFiltrados) return [];
 
-    const fechaStr = dia.toISOString().split('T')[0]; // Convert date to YYYY-MM-DD format
-    return this.listarCitas.filter(cita => cita.fecha === fechaStr);
+    const fechaStr =dia.getFullYear() + '-' +
+      String(dia.getMonth() + 1).padStart(2, '0') + '-' +
+      String(dia.getDate()).padStart(2, '0'); // Convert date to YYYY-MM-DD format
+    return this.listaCitasFiltrados.filter(cita => cita.fecha === fechaStr);
   }
 
   abrirModalCrear() {
@@ -237,10 +230,14 @@ export class Citas implements OnInit {
   }
 
   onDayClick(dia: Date) {
+    console.log(dia);
     this.fechaSeleccionada = dia;
     // Prellenar la fecha en el formulario de nueva cita
-    const fechaFormateada = dia.toISOString().split('T')[0];
+    const fechaFormateada = dia.getFullYear() + '-' +
+      String(dia.getMonth() + 1).padStart(2, '0') + '-' +
+      String(dia.getDate()).padStart(2, '0');
 
+    console.log(fechaFormateada);
     this.citasEditando = {
       fecha: fechaFormateada,
       detalles: '',

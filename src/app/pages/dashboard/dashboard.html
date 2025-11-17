@@ -63,8 +63,8 @@
               <td>{{ ficha.edad }}</td>
               <td>{{ ficha.peso }}</td>
               <td>{{ ficha.chip }}</td>
-              <td>{{ getNombreRazaTabla(ficha.idRaza) }}</td>
-              <td>{{ getNombreClienteTabla(ficha.idCliente) }}</td>
+              <td>{{ getNombreRaza(ficha.idRaza) }}</td>
+              <td>{{ getNombreCliente(ficha.idCliente) }}</td>
               <td class="acciones-column">
                 <button class="btn-ver" (click)="verFicha(ficha)">Ver</button>
                 <button class="btn-editar" (click)="mostrarEditarFicha(ficha)">Editar</button>
