@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, HostListener} from '@angular/core';
 import {Cliente, ClienteI} from '../../services/cliente';
 import {Cita, CitaI} from '../../services/cita';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,16 @@ import { forkJoin } from 'rxjs';
     imports: [CommonModule, FormsModule]
 })
 export class Citas implements OnInit {
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    // Cerrar el menú si se hace clic fuera de él
+    if (!(event.target as Element).closest('.appointment-badge')) {
+      this.citaSeleccionada = null;
+    }
+  }
+
+  public citaSeleccionada: CitaI | null = null;
 
   public error: null | string = null;
   public listarCitas: CitaI[] = [];
@@ -277,7 +287,7 @@ export class Citas implements OnInit {
           next: (response) => {
             console.log('Cita creada:', response);
             // Agregar la nueva cita a la lista
-            this.listarCitas.push(response);
+            //this.listarCitas.push(response);
             this.listaCitasFiltrados.push(response);
             this.cerrarModal();
           },
@@ -317,5 +327,19 @@ export class Citas implements OnInit {
     }
     const vet = this.vetsDisponibles.find(v => v.idVet === idVet);
     return vet ? `${vet.nombre} ${vet.apellido}` : 'Veterinario no encontrado';
+  }
+
+  toggleMenuCita(cita: CitaI) {
+    if (this.citaSeleccionada && this.citaSeleccionada.idCita === cita.idCita) {
+      // Si ya está abierto, lo cerramos
+      this.citaSeleccionada = null;
+    } else {
+      // Lo abrimos
+      this.citaSeleccionada = cita;
+    }
+  }
+
+  cerrarMenuCita() {
+    this.citaSeleccionada = null;
   }
 }

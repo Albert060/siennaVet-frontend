@@ -16,7 +16,8 @@ export const routes: Routes = [
             { path: "citas", loadComponent: () => import('./pages/citas/citas').then(m => m.Citas) },
             { path: "vets", loadComponent: () => import('./pages/vets/vets').then(m => m.Vets) },
             { path: "clientes", loadComponent: () => import('./pages/clientes/clientes').then(m => m.Clientes) },
-            { path: "razas", loadComponent: () => import('./pages/razas/razas').then(m => m.Razas) }
+            { path: "razas", loadComponent: () => import('./pages/razas/razas').then(m => m.Razas) },
+            { path: "mensajes", loadComponent: () => import('./pages/mensajes/mensajes').then(m => m.Mensajes) }
         ]
     }
 ];

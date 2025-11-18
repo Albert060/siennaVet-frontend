@@ -1,0 +1,178 @@
+<div class="dashboard-container">
+  <h1>Panel de Mensajes</h1>
+  <p>
+    Gestión de clientes en SiennaVet. Aquí puedes ver, los registros de Mensajes.
+  </p>
+
+  <!-- Tabla para mostrar los mensajes-->
+  <div class="fichas-table-container">
+    <div class="search-container">
+      <h2>Registro de Mensajes</h2>
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Buscar en todos los mensajes..."
+          [(ngModel)]="terminoBusqueda"
+          (input)="buscarMensajes()"
+          class="search-input"
+        />
+      </div>
+    </div>
+
+    <!-- Mostrar mensaje de carga -->
+    @if (cargando) {
+      <div class="loading">Cargando mensajes...</div>
+    }
+
+    <!-- Mostrar mensaje de error -->
+    @if (error != null) {
+      <div class="error">
+        {{ error }}
+      </div>
+    }
+
+    <!-- Tabla de mensajes -->
+    @if (!cargando && !error) {
+      <table class="fichas-table">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Servicio</th>
+          <th>Mensaje</th>
+          <th>Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (contacto of listaContactoFiltrados; track contacto.idContacto) {
+            <tr>
+              <td>{{ contacto.idContacto }}</td>
+              <td>{{ contacto.nombre }}</td>
+              <td>{{ contacto.email }}</td>
+              <td>{{ contacto.servicio }}</td>
+              <td>{{ contacto.mensaje }}</td>
+              <td class="acciones-column">
+                <button class="btn-ver" (click)="verContacto(contacto)">Ver</button>
+               <!-- <button class="btn-editar" (click)="mostrarEditarMensaje(contacto)">Editar</button>
+                <button class="btn-eliminar" (click)="mostrarEliminarMensaje(contacto)">Eliminar</button>-->
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+
+  <!-- Modal de edición de mensaje -->
+  @if (showModal) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Editar Cliente</h3>
+          <span class="close-btn" (click)="cerrarModal()">&times;</span>
+        </div>
+        @if (contactoEditando) {
+          <div class="modal-body">
+            <form (ngSubmit)="guardarMensaje()" #clienteForm="ngForm">
+              <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input
+                  type="text"
+                  id="nombre"
+                  [(ngModel)]="contactoEditando.nombre"
+                  name="nombre"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="apellido">Email:</label>
+                <input
+                  type="text"
+                  id="apellido"
+                  [(ngModel)]="contactoEditando.email"
+                  name="apellido"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="dni">Servicio:</label>
+                <input
+                  type="text"
+                  id="dni"
+                  [(ngModel)]="contactoEditando.servicio"
+                  name="dni"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="direccion">Mensaje:</label>
+                <input
+                  type="text"
+                  id="direccion"
+                  [(ngModel)]="contactoEditando.mensaje"
+                  name="direccion"
+                  class="form-control"
+                  required
+                />
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-guardar" [disabled]="!clienteForm.form.valid">
+                  Guardar
+                </button>
+              </div>
+            </form>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Modal de visualización de detalles de los mensajes -->
+  @if (showDetails) {
+    <div class="modal-overlay" (click)="cerrarDetalles()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Detalles del Mensajes</h3>
+          <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
+        </div>
+        @if (mensajeDetalles) {
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="nombre">Nombre:</label>
+              <div class="form-control-readonly">{{ mensajeDetalles.nombre }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="apellido">Email:</label>
+              <div class="form-control-readonly">{{ mensajeDetalles.email }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="dni">Servicio:</label>
+              <div class="form-control-readonly">{{ mensajeDetalles.servicio }}</div>
+            </div>
+
+            <div class="form-group">
+              <label for="direccion">Mensaje:</label>
+              <div class="form-control-readonly">{{ mensajeDetalles.mensaje }}</div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+

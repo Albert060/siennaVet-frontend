@@ -51,15 +51,25 @@
 }
 
 .search-container {
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.search-box {
+  flex: 1;
+  max-width: 300px;
+  margin-left: 1rem;
 }
 
 .search-input {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 14px;
+  width: 20%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
 }
 
 .calendar {
@@ -138,9 +148,33 @@
   cursor: pointer;
 }
 
-.appointment-badge:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+.menu-options {
+  position: absolute;
+  top: 20;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  color: black;
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  min-width: 100px;
+  overflow: hidden;
+}
+
+.menu-options button {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.menu-options button:hover {
+  background-color: #f0f0f0;
 }
 
 .more-appointments {

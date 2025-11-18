@@ -58,13 +58,21 @@
               <div class="day-number">{{ day.getDate() }}</div>
               <div class="day-appointments">
                 @for (cita of getCitasDelDia(day); track cita.idCita; let i = $index) {
-                  @if (i < 3) { <!-- Mostrar máximo 3 citas por día -->
+                  @if (i < 3) {
+                    <!-- Mostrar máximo 3 citas por día -->
                     <div
                       class="appointment-badge"
                       [style.backgroundColor]="'var(--principal)'"
-                      (click)="verCitas(cita); $event.stopPropagation()"
+                      (click)="toggleMenuCita(cita); $event.stopPropagation();"
                     >
-                      {{ cita.hora }} - {{ cita.detalles }}
+                      <span>{{ cita.hora.substring(0, 5) }} - {{ cita.detalles }}</span>
+                      @if (cita.idCita === citaSeleccionada?.idCita) {
+                        <div class="menu-options">
+                          <button (click)="verCitas(cita); cerrarMenuCita()">Ver</button>
+                          <button (click)="mostrarEditarCita(cita); cerrarMenuCita()">Editar</button>
+                          <button (click)="mostrarEliminarCitas(cita); cerrarMenuCita()">Eliminar</button>
+                        </div>
+                      }
                     </div>
                   }
                 }
@@ -184,7 +192,8 @@
                 >
                   <option value="">Selecciona una ficha</option>
                   @for (ficha of fichasDisponibles; track ficha.idFicha) {
-                    <option [value]="ficha.idFicha">{{ ficha.nombre }} ({{ getNombreClienteFicha(ficha.idCliente) }})</option>
+                    <option [value]="ficha.idFicha">{{ ficha.nombre }} ({{ getNombreClienteFicha(ficha.idCliente) }})
+                    </option>
                   }
                 </select>
               </div>
