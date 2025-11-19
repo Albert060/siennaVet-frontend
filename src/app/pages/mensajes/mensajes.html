@@ -49,7 +49,7 @@
             <tr>
               <td>{{ contacto.idContacto }}</td>
               <td>{{ contacto.nombre }}</td>
-              <td>{{ contacto.email }}</td>
+              <td><a href="mailto:{{ contacto.email }}">{{ contacto.email }}</a></td>
               <td>{{ contacto.servicio }}</td>
               <td>{{ contacto.mensaje }}</td>
               <td class="acciones-column">

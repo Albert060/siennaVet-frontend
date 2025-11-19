@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import {Observable} from 'rxjs';
 
 export interface FichaAnimales{
   idFicha?: number;
@@ -21,8 +22,8 @@ export class Ficha {
 
   constructor(private http: HttpClient) { }
 
-  listarFicha() {
-    return this.http.get<FichaAnimales[]>(this.endpoint)
+  listarFicha(offset = 0, limit = 1000) {
+    return this.http.get<FichaAnimales[]>(`${this.endpoint}?offset=${offset}&limit=${limit}`)
   }
 
   editarFicha(editarFicha: FichaAnimales) {

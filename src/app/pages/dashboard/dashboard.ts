@@ -26,13 +26,15 @@ export class Dashboard implements OnInit {
   public razasDisponibles: RazaI[] = [];
   public clientesDisponibles: ClienteI[] = [];
   public esCreacion: boolean = false; // Flag to determine if we're creating or editing
+  public offset = 0;
+  public limit = 6;
+  public isPagina: boolean = false;
 
   constructor(private service: Ficha, private razaService: Raza, private clienteService: Cliente) { }
 
   ngOnInit() {
     this.cargando = true
 
-    // Load available breeds and clients
     this.razaService.listarRaza().subscribe({
       next: (response) => {
         this.razasDisponibles = response;
@@ -45,30 +47,81 @@ export class Dashboard implements OnInit {
       }
     });
 
-    this.service.listarFicha().subscribe({
+    this.service.listarFicha(this.offset, this.limit).subscribe({
       next: (response) => {
         if (!Array.isArray(response)) {
-          this.error = "Algo salio mal"
-          this.cargando = false
-          return
+          this.error = "Algo salio mal";
+          this.cargando = false;
+          return;
         }
 
-        if (response.length == 0) {
-          this.error = "Aun no hay datos"
-          this.cargando = false
-          return
+        if (response.length === 0 && !this.isPagina) {
+          this.error = "Aun no hay datos";
+          this.cargando = false;
+          return;
+        }
+
+        if (response.length === 0 && this.isPagina) {
+          this.offset = 0;
+          this.cargarFichas();
+          return;
         }
 
         this.listaFichas = response;
-        this.listaFichasFiltradas = response; // Inicializar la lista filtrada con todas las fichas
-        this.cargando = false
+        this.listaFichasFiltradas = [...response]; // Inicializar la lista filtrada con todas las fichas
+        this.cargando = false;
       },
       error: (error) => {
-        this.error = 'Error del servidor'
-        console.log(error)
-        this.cargando = false
+        this.error = 'Error del servidor';
+        console.log(error);
+        this.cargando = false;
       },
-    })
+    });
+  }
+
+  cargarFichas() {
+    this.cargando = true;
+
+    this.service.listarFicha(this.offset, this.limit).subscribe({
+      next: (response) => {
+        if (!Array.isArray(response)) {
+          this.error = "Algo salio mal";
+          this.cargando = false;
+          return;
+        }
+
+        if (response.length === 0 && this.offset > 0) {
+          this.offset = 0;
+          this.cargarFichas();
+          return;
+        }
+
+        this.listaFichas = response;
+        this.listaFichasFiltradas = [...response];
+        this.cargando = false;
+      },
+      error: (error) => {
+        this.error = 'Error del servidor';
+        console.log(error);
+        this.cargando = false;
+      },
+    });
+  }
+
+  siguientePagina() {
+    this.isPagina = true;
+    this.offset++;
+    this.cargarFichas();
+  }
+
+  anteriorPagina() {
+    this.isPagina = true;
+    if (this.offset <= 0) {
+      this.offset = 0;
+      return;
+    }
+    this.offset--;
+    this.cargarFichas();
   }
 
   verFicha(ficha: FichaAnimales) {

@@ -287,7 +287,6 @@ export class Citas implements OnInit {
           next: (response) => {
             console.log('Cita creada:', response);
             // Agregar la nueva cita a la lista
-            //this.listarCitas.push(response);
             this.listaCitasFiltrados.push(response);
             this.cerrarModal();
           },
