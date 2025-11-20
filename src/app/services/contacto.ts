@@ -7,7 +7,7 @@ export interface ContactoI {
   email: string;
   servicio: string;
   mensaje: string;
-  
+
 }
 @Injectable({
   providedIn: 'root'
@@ -21,8 +21,8 @@ export class Contacto {
     return this.http.post<ContactoI>(this.endpoint, crearContacto)
   }
 
-  listarContacto() {
-    return this.http.get<ContactoI[]>(this.endpoint)
+  listarContacto(offset = 0, limit = 1000) {
+    return this.http.get<ContactoI[]>(`${this.endpoint}?offset=${offset}&limit=${limit}`)
   }
 
   editarcontacto(editarContacto: ContactoI) {

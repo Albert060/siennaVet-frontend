@@ -19,13 +19,16 @@ export class Mensajes implements OnInit {
   public contactoEditando: ContactoI | null = null;
   public mensajeDetalles: ContactoI | null = null;
   public eliminarContacto: ContactoI | null = null;
+  public offset = 0;
+  public limit = 6;
+  public isPagina: boolean = false;
 
   constructor(private service: Contacto) { }
 
   ngOnInit() {
     this.cargando = true
 
-    this.service.listarContacto().subscribe({
+    this.service.listarContacto(this.offset, this.limit).subscribe({
       next: (response) => {
         if (!Array.isArray(response)) {
           this.error = "Algo salio mal"
@@ -33,11 +36,23 @@ export class Mensajes implements OnInit {
           return
         }
 
-        if (response.length == 0) {
+        if (response.length === 0 && !this.isPagina) {
+          this.error = "Aun no hay datos";
+          this.cargando = false;
+          return;
+        }
+
+        if (response.length === 0 && this.isPagina) {
+          this.offset = 0;
+          this.cargarContacto();
+          return;
+        }
+
+       /* if (response.length == 0) {
           this.error = "Aun no hay datos"
           this.cargando = false
           return
-        }
+        }*/
 
         this.listaContacto = response;
         this.listaContactoFiltrados = response; // Inicializar la lista filtrada con todos los mensajes
@@ -49,6 +64,51 @@ export class Mensajes implements OnInit {
         this.cargando = false
       },
     })
+  }
+
+  cargarContacto() {
+    this.cargando = true;
+
+    this.service.listarContacto(this.offset, this.limit).subscribe({
+      next: (response) => {
+        if (!Array.isArray(response)) {
+          this.error = "Algo salio mal";
+          this.cargando = false;
+          return;
+        }
+
+        if (response.length === 0 && this.offset > 0) {
+          this.offset = 0;
+          this.cargarContacto();
+          return;
+        }
+
+        this.listaContacto = response;
+        this.listaContactoFiltrados = [...response];
+        this.cargando = false;
+      },
+      error: (error) => {
+        this.error = 'Error del servidor';
+        console.log(error);
+        this.cargando = false;
+      },
+    });
+  }
+
+  siguientePagina() {
+    this.isPagina = true;
+    this.offset++;
+    this.cargarContacto();
+  }
+
+  anteriorPagina() {
+    this.isPagina = true;
+    if (this.offset <= 0) {
+      this.offset = 0;
+      return;
+    }
+    this.offset--;
+    this.cargarContacto();
   }
 
   verContacto(contacto: ContactoI) {

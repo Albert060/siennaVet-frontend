@@ -23,8 +23,8 @@ export class Cliente {
         return this.http.post<ClienteI>(this.endpoint, crearCliente)
     }
 
-    listarCliente() {
-        return this.http.get<ClienteI[]>(this.endpoint)
+    listarCliente(offset = 0, limit = 1000) {
+        return this.http.get<ClienteI[]>(`${this.endpoint}?offset=${offset}&limit=${limit}`)
     }
 
     editarcliente(editarCliente: ClienteI) {

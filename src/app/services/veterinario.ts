@@ -26,8 +26,8 @@ export class Veterinario {
         return this.http.post<VeterinarioI>(this.endpoint, crearVeterinario)
     }
 
-    listarVeterinario() {
-        return this.http.get<VeterinarioI[]>(this.endpoint)
+    listarVeterinario(offset = 0, limit = 1000) {
+        return this.http.get<VeterinarioI[]>(`${this.endpoint}?offset=${offset}&limit=${limit}`)
     }
 
     editarveterinario(editarVeterinario: VeterinarioI) {

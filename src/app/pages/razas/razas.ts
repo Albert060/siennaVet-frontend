@@ -21,13 +21,16 @@ export class Razas {
   public razaEditando: RazaI | null = null;
   public razaDetalles: RazaI | null = null;
   public eliminarRaza: RazaI | null = null;
+  public offset = 0;
+  public limit = 6;
+  public isPagina: boolean = false;
 
   constructor(private service: Raza) { }
 
   ngOnInit() {
     this.cargando = true
 
-    this.service.listarRaza().subscribe({
+    this.service.listarRaza(this.offset, this.limit).subscribe({
       next: (response) => {
         if (!Array.isArray(response)) {
           this.error = "Algo salio mal"
@@ -35,11 +38,23 @@ export class Razas {
           return
         }
 
-        if (response.length == 0) {
+        if (response.length === 0 && !this.isPagina) {
+          this.error = "Aun no hay datos";
+          this.cargando = false;
+          return;
+        }
+
+        if (response.length === 0 && this.isPagina) {
+          this.offset = 0;
+          this.cargarRaza();
+          return;
+        }
+
+       /* if (response.length == 0) {
           this.error = "Aun no hay datos"
           this.cargando = false
           return
-        }
+        }*/
 
         this.listaRaza = response;
         this.listaRazaFiltrados = response; // Inicializar la lista filtrada con todos los clientes
@@ -51,6 +66,51 @@ export class Razas {
         this.cargando = false
       },
     })
+  }
+
+  cargarRaza() {
+    this.cargando = true;
+
+    this.service.listarRaza(this.offset, this.limit).subscribe({
+      next: (response) => {
+        if (!Array.isArray(response)) {
+          this.error = "Algo salio mal";
+          this.cargando = false;
+          return;
+        }
+
+        if (response.length === 0 && this.offset > 0) {
+          this.offset = 0;
+          this.cargarRaza();
+          return;
+        }
+
+        this.listaRaza = response;
+        this.listaRazaFiltrados = [...response];
+        this.cargando = false;
+      },
+      error: (error) => {
+        this.error = 'Error del servidor';
+        console.log(error);
+        this.cargando = false;
+      },
+    });
+  }
+
+  siguientePagina() {
+    this.isPagina = true;
+    this.offset++;
+    this.cargarRaza();
+  }
+
+  anteriorPagina() {
+    this.isPagina = true;
+    if (this.offset <= 0) {
+      this.offset = 0;
+      return;
+    }
+    this.offset--;
+    this.cargarRaza();
   }
 
   verRaza(raza: RazaI) {

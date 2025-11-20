@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, NgIf } from '@angular/common';
+import { CommonModule} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Veterinario, VeterinarioI } from '../../services/veterinario';
 
@@ -20,6 +20,9 @@ export class Vets implements OnInit {
     public veterinarioEditando: VeterinarioI | null = null;
     public veterinarioDetalles: VeterinarioI | null = null;
     public eliminarVeterinario: VeterinarioI | null = null;
+    public offset = 0;
+    public limit = 6;
+    public isPagina: boolean = false;
 
     constructor(private service: Veterinario) { }
 
@@ -34,11 +37,23 @@ export class Vets implements OnInit {
                     return
                 }
 
-                if (response.length == 0) {
+              if (response.length === 0 && !this.isPagina) {
+                this.error = "Aun no hay datos";
+                this.cargando = false;
+                return;
+              }
+
+              if (response.length === 0 && this.isPagina) {
+                this.offset = 0;
+                this.cargarVeterinario();
+                return;
+              }
+
+               /* if (response.length == 0) {
                     this.error = "Aun no hay datos"
                     this.cargando = false
                     return
-                }
+                }*/
 
                 this.listaVeterinarios = response;
                 this.listaVeterinariosFiltrados = response; // Inicializar la lista filtrada con todos los veterinarios
@@ -51,6 +66,51 @@ export class Vets implements OnInit {
             },
         })
     }
+
+  cargarVeterinario() {
+    this.cargando = true;
+
+    this.service.listarVeterinario(this.offset, this.limit).subscribe({
+      next: (response) => {
+        if (!Array.isArray(response)) {
+          this.error = "Algo salio mal";
+          this.cargando = false;
+          return;
+        }
+
+        if (response.length === 0 && this.offset > 0) {
+          this.offset = 0;
+          this.cargarVeterinario();
+          return;
+        }
+
+        this.listaVeterinarios = response;
+        this.listaVeterinariosFiltrados = [...response];
+        this.cargando = false;
+      },
+      error: (error) => {
+        this.error = 'Error del servidor';
+        console.log(error);
+        this.cargando = false;
+      },
+    });
+  }
+
+  siguientePagina() {
+    this.isPagina = true;
+    this.offset++;
+    this.cargarVeterinario();
+  }
+
+  anteriorPagina() {
+    this.isPagina = true;
+    if (this.offset <= 0) {
+      this.offset = 0;
+      return;
+    }
+    this.offset--;
+    this.cargarVeterinario();
+  }
 
     verVeterinario(veterinario: VeterinarioI) {
         this.veterinarioDetalles = veterinario;
