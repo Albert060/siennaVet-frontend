@@ -1,199 +1,52 @@
 import { Component } from '@angular/core';
-import { Raza, RazaI } from '../../services/raza';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { Raza } from '../../services/raza';
+import { TableGenericComponent } from '../../components/table-generic/table-generic.component';
+import { TableConfig } from '../../components/table-generic/table-generic.interface';
 
 @Component({
   selector: 'app-razas',
-  imports: [CommonModule, FormsModule],
+  imports: [TableGenericComponent],
   templateUrl: './razas.html',
-  styleUrl: './razas.css'
 })
 export class Razas {
-
-  public error: null | string = null;
-  public listaRaza: RazaI[] = [];
-  public listaRazaFiltrados: RazaI[] = [];
-  public cargando: boolean = false;
-  public showModal: boolean = false;
-  public showDetails: boolean = false;
-  public terminoBusqueda: string = '';
-  public razaEditando: RazaI | null = null;
-  public razaDetalles: RazaI | null = null;
-  public eliminarRaza: RazaI | null = null;
-  public offset = 0;
-  public limit = 6;
-  public isPagina: boolean = false;
-
-  constructor(private service: Raza) { }
-
-  ngOnInit() {
-    this.cargando = true
-
-    this.service.listarRaza(this.offset, this.limit).subscribe({
-      next: (response) => {
-        if (!Array.isArray(response)) {
-          this.error = "Algo salio mal"
-          this.cargando = false
-          return
-        }
-
-        if (response.length === 0 && !this.isPagina) {
-          this.error = "Aun no hay datos";
-          this.cargando = false;
-          return;
-        }
-
-        if (response.length === 0 && this.isPagina) {
-          this.offset = 0;
-          this.cargarRaza();
-          return;
-        }
-
-       /* if (response.length == 0) {
-          this.error = "Aun no hay datos"
-          this.cargando = false
-          return
-        }*/
-
-        this.listaRaza = response;
-        this.listaRazaFiltrados = response; // Inicializar la lista filtrada con todos los clientes
-        this.cargando = false
+  config: TableConfig = {
+    title: 'Panel de Razas',
+    subtitle: 'Gestión de razas en SiennaVet. Aquí puedes ver, editar y eliminar los registros de razas.',
+    endpoint: 'http://localhost:8080/api/razas',
+    enableCreation: true,
+    enableSearch: true,
+    enablePagination: true,
+    enableDetails: true,
+    enableEdit: true,
+    enableDelete: true,
+    itemsPerPage: 6,
+    fields: [
+      {
+        key: 'idRaza',
+        label: 'ID',
+        type: 'readonly',
+        display: true,
+        searchable: false
       },
-      error: (error) => {
-        this.error = 'Error del servidor'
-        console.log(error)
-        this.cargando = false
+      {
+        key: 'tipoRaza',
+        label: 'Tipo Raza',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       },
-    })
-  }
-
-  cargarRaza() {
-    this.cargando = true;
-
-    this.service.listarRaza(this.offset, this.limit).subscribe({
-      next: (response) => {
-        if (!Array.isArray(response)) {
-          this.error = "Algo salio mal";
-          this.cargando = false;
-          return;
-        }
-
-        if (response.length === 0 && this.offset > 0) {
-          this.offset = 0;
-          this.cargarRaza();
-          return;
-        }
-
-        this.listaRaza = response;
-        this.listaRazaFiltrados = [...response];
-        this.cargando = false;
-      },
-      error: (error) => {
-        this.error = 'Error del servidor';
-        console.log(error);
-        this.cargando = false;
-      },
-    });
-  }
-
-  siguientePagina() {
-    this.isPagina = true;
-    this.offset++;
-    this.cargarRaza();
-  }
-
-  anteriorPagina() {
-    this.isPagina = true;
-    if (this.offset <= 0) {
-      this.offset = 0;
-      return;
-    }
-    this.offset--;
-    this.cargarRaza();
-  }
-
-  verRaza(raza: RazaI) {
-    this.razaDetalles = raza;
-    this.showDetails = true;
-  }
-
-  cerrarDetalles() {
-    this.showDetails = false;
-    this.razaDetalles = null;
-  }
-
-  buscarRaza() {
-    if (!this.terminoBusqueda.trim()) {
-      // Si no hay término de búsqueda, mostrar todos los clientes
-      this.listaRazaFiltrados = [...this.listaRaza];
-    } else {
-      // Filtrar los clientes según el término de búsqueda
-      const termino = this.terminoBusqueda.toLowerCase().trim();
-      this.listaRazaFiltrados = this.listaRaza.filter(raza =>
-        raza.tipoRaza.toLowerCase().includes(termino) ||
-        raza.nombre.toLowerCase().includes(termino)
-      );
-    }
-  }
-
-  mostrarEditarRaza(raza: RazaI) {
-    this.razaEditando = raza;
-    this.showModal = true;
-  }
-
-  cerrarModal() {
-    this.showModal = false;
-    this.razaEditando = null;
-  }
-
-  guardarRaza() {
-    if (this.razaEditando) {
-      this.editarRaza(this.razaEditando);
-      this.cerrarModal();
-    }
-  }
-
-  editarRaza(razaEditado: RazaI) {
-    this.service.editarRaza(razaEditado).subscribe({
-      next: (response) => {
-        console.log(response);
-        // Actualizar la lista localmente
-        const index = this.listaRaza.findIndex(c => c.idRaza === razaEditado.idRaza);
-        if (index !== -1) {
-          this.listaRaza[index] = razaEditado;
-          this.listaRazaFiltrados = [...this.listaRaza]; // Actualizar la lista filtrada también
-        }
-      },
-      error: (error) => {
-        console.error('Error al modificar el cliente:', error);
-        this.error = 'Error al modificar el cliente';
+      {
+        key: 'nombre',
+        label: 'Nombre Raza',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       }
-    });
-  }
+    ]
+  };
 
-  mostrarEliminarRaza(eliminarRaza: RazaI) {
-    const confirmacion = confirm(`¿Estás seguro de eliminar el cliente con id ${eliminarRaza.idRaza}?`);
-    if (confirmacion) {
-      this.service.eliminarRaza(eliminarRaza).subscribe({
-        next: (response) => {
-          console.log(response);
-          // Actualiza el arreglo local filtrando por id
-          this.listaRaza = this.listaRaza.filter(c => c.idRaza !== eliminarRaza.idRaza);
-          this.listaRazaFiltrados = [...this.listaRaza]; // Actualizar la lista filtrada también
-        },
-        error: (error) => {
-          console.error('Error al eliminar el cliente', error);
-        }
-      });
-    }
-  }
-
-  crearNuevaRaza() {
-    this.razaEditando = {
-      tipoRaza: '',
-      nombre: '',
-    };
-    this.showModal = true;
+  constructor(public service: Raza) {
   }
 }

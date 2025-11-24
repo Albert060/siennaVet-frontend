@@ -1,213 +1,104 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule} from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Veterinario, VeterinarioI } from '../../services/veterinario';
+import { Component } from '@angular/core';
+import { Veterinario } from '../../services/veterinario';
+import { TableGenericComponent } from '../../components/table-generic/table-generic.component';
+import { TableConfig } from '../../components/table-generic/table-generic.interface';
 
 @Component({
-    selector: 'app-vets',
-    imports: [CommonModule, FormsModule],
-    templateUrl: './vets.html',
-    styleUrl: './vets.css'
+  selector: 'app-vets',
+  imports: [TableGenericComponent],
+  templateUrl: './vets.html',
 })
-export class Vets implements OnInit {
-    public error: null | string = null;
-    public listaVeterinarios: VeterinarioI[] = [];
-    public listaVeterinariosFiltrados: VeterinarioI[] = [];
-    public cargando: boolean = false;
-    public showModal: boolean = false;
-    public showDetails: boolean = false;
-    public terminoBusqueda: string = '';
-    public veterinarioEditando: VeterinarioI | null = null;
-    public veterinarioDetalles: VeterinarioI | null = null;
-    public eliminarVeterinario: VeterinarioI | null = null;
-    public offset = 0;
-    public limit = 6;
-    public isPagina: boolean = false;
-
-    constructor(private service: Veterinario) { }
-
-    ngOnInit() {
-        this.cargando = true
-
-        this.service.listarVeterinario().subscribe({
-            next: (response) => {
-                if (!Array.isArray(response)) {
-                    this.error = "Algo salio mal"
-                    this.cargando = false
-                    return
-                }
-
-              if (response.length === 0 && !this.isPagina) {
-                this.error = "Aun no hay datos";
-                this.cargando = false;
-                return;
-              }
-
-              if (response.length === 0 && this.isPagina) {
-                this.offset = 0;
-                this.cargarVeterinario();
-                return;
-              }
-
-               /* if (response.length == 0) {
-                    this.error = "Aun no hay datos"
-                    this.cargando = false
-                    return
-                }*/
-
-                this.listaVeterinarios = response;
-                this.listaVeterinariosFiltrados = response; // Inicializar la lista filtrada con todos los veterinarios
-                this.cargando = false
-            },
-            error: (error) => {
-                this.error = 'Error del servidor'
-                console.log(error)
-                this.cargando = false
-            },
-        })
-    }
-
-  cargarVeterinario() {
-    this.cargando = true;
-
-    this.service.listarVeterinario(this.offset, this.limit).subscribe({
-      next: (response) => {
-        if (!Array.isArray(response)) {
-          this.error = "Algo salio mal";
-          this.cargando = false;
-          return;
-        }
-
-        if (response.length === 0 && this.offset > 0) {
-          this.offset = 0;
-          this.cargarVeterinario();
-          return;
-        }
-
-        this.listaVeterinarios = response;
-        this.listaVeterinariosFiltrados = [...response];
-        this.cargando = false;
+export class Vets {
+  config: TableConfig = {
+    title: 'Panel de Veterinarios',
+    subtitle: 'Bienvenido al panel de veterinarios de SiennaVet. Aquí puedes gestionar la información de los veterinarios.',
+    endpoint: 'http://localhost:8080/api/veterinarios',
+    enableCreation: true,
+    enableSearch: true,
+    enablePagination: true,
+    enableDetails: true,
+    enableEdit: true,
+    enableDelete: true,
+    itemsPerPage: 6,
+    fields: [
+      {
+        key: 'idVet',
+        label: 'ID',
+        type: 'readonly',
+        display: true,
+        searchable: false
       },
-      error: (error) => {
-        this.error = 'Error del servidor';
-        console.log(error);
-        this.cargando = false;
+      {
+        key: 'nombre',
+        label: 'Nombre',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       },
-    });
-  }
+      {
+        key: 'apellido',
+        label: 'Apellido',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
+      },
+      {
+        key: 'dni',
+        label: 'DNI',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
+      },
+      {
+        key: 'sexo',
+        label: 'Sexo',
+        type: 'select',
+        display: true,
+        searchable: true,
+        editable: true,
+        options: [
+          { value: 'Masculino', label: 'Masculino' },
+          { value: 'Femenino', label: 'Femenino' },
+          { value: 'Otro', label: 'Otro' }
+        ]
+      },
+      {
+        key: 'numColegiado',
+        label: 'Núm Colegiado',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
+      },
+      {
+        key: 'email',
+        label: 'Email',
+        type: 'email',
+        display: true,
+        searchable: true,
+        editable: true
+      },
+      {
+        key: 'telefono',
+        label: 'Teléfono',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
+      },
+      {
+        key: 'fechaInicio',
+        label: 'Fecha Inicio',
+        type: 'date',
+        display: true,
+        searchable: true,
+        editable: true
+      }
+    ]
+  };
 
-  siguientePagina() {
-    this.isPagina = true;
-    this.offset++;
-    this.cargarVeterinario();
-  }
-
-  anteriorPagina() {
-    this.isPagina = true;
-    if (this.offset <= 0) {
-      this.offset = 0;
-      return;
-    }
-    this.offset--;
-    this.cargarVeterinario();
-  }
-
-    verVeterinario(veterinario: VeterinarioI) {
-        this.veterinarioDetalles = veterinario;
-        this.showDetails = true;
-    }
-
-    cerrarDetalles() {
-        this.showDetails = false;
-        this.veterinarioDetalles = null;
-    }
-
-    buscarVeterinarios() {
-        if (!this.terminoBusqueda.trim()) {
-            // Si no hay término de búsqueda, mostrar todos los veterinarios
-            this.listaVeterinariosFiltrados = [...this.listaVeterinarios];
-        } else {
-            // Filtrar los veterinarios según el término de búsqueda
-            const termino = this.terminoBusqueda.toLowerCase().trim();
-            this.listaVeterinariosFiltrados = this.listaVeterinarios.filter(veterinario =>
-                veterinario.nombre.toLowerCase().includes(termino) ||
-                veterinario.apellido.toLowerCase().includes(termino) ||
-                veterinario.dni.toLowerCase().includes(termino) ||
-                veterinario.numColegiado.toLowerCase().includes(termino) ||
-                veterinario.email.toLowerCase().includes(termino) ||
-                veterinario.telefono.toLowerCase().includes(termino)
-            );
-        }
-    }
-
-    mostrarEditarVeterinario(veterinario: VeterinarioI) {
-        this.veterinarioEditando = { ...veterinario }; // Crear una copia para evitar modificar el original
-        this.showModal = true;
-    }
-
-    cerrarModal() {
-        this.showModal = false;
-        this.veterinarioEditando = null;
-    }
-
-    guardarVeterinario() {
-        if (this.veterinarioEditando) {
-            this.editarVeterinario(this.veterinarioEditando);
-            this.cerrarModal();
-        }
-    }
-
-    editarVeterinario(veterinarioEditado: VeterinarioI) {
-        this.service.editarveterinario(veterinarioEditado).subscribe({
-            next: (response) => {
-                console.log(response);
-                // Actualizar la lista local con los cambios
-                const index = this.listaVeterinarios.findIndex(v => v.idVet === response.idVet);
-                if (index !== -1) {
-                    this.listaVeterinarios[index] = response;
-                    // Actualizar también la lista filtrada
-                    const indexFiltrado = this.listaVeterinariosFiltrados.findIndex(v => v.idVet === response.idVet);
-                    if (indexFiltrado !== -1) {
-                        this.listaVeterinariosFiltrados[indexFiltrado] = response;
-                    }
-                }
-            },
-            error: (error) => {
-                console.error('Error al modificar el veterinario:', error);
-                this.error = 'Error al modificar el veterinario';
-            }
-        });
-    }
-
-    mostrarEliminarVeterinario(eliminarVeterinario: VeterinarioI) {
-        const confirmacion = confirm(`¿Estás seguro de eliminar el veterinario ${eliminarVeterinario.nombre} ${eliminarVeterinario.apellido}?`);
-        if (confirmacion) {
-            this.service.eliminarVeterinario(eliminarVeterinario).subscribe({
-                next: (response) => {
-                    console.log(response);
-                    // Actualiza el arreglo local filtrando por id
-                    this.listaVeterinarios = this.listaVeterinarios.filter(v => v.idVet !== eliminarVeterinario.idVet);
-                    this.listaVeterinariosFiltrados = this.listaVeterinariosFiltrados.filter(v => v.idVet !== eliminarVeterinario.idVet);
-                },
-                error: (error) => {
-                    console.error('Error al eliminar el veterinario', error);
-                }
-            });
-        }
-    }
-
-    crearNuevoVeterinario() {
-        this.veterinarioEditando = {
-            nombre: '',
-            apellido: '',
-            dni: '',
-            sexo: '',
-            numColegiado: '',
-            email: '',
-            contrasena: '',
-            telefono: '',
-            fechaInicio: new Date().toISOString().split('T')[0] // Fecha actual en formato YYYY-MM-DD
-        };
-        this.showModal = true;
-    }
+  constructor(public service: Veterinario) { }
 }

@@ -1,207 +1,83 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Cliente, ClienteI } from '../../services/cliente';
+import { Component } from '@angular/core';
+import { Cliente } from '../../services/cliente';
+import { TableGenericComponent } from '../../components/table-generic/table-generic.component';
+import { TableConfig } from '../../components/table-generic/table-generic.interface';
 
 @Component({
   selector: 'app-clientes',
-  imports: [CommonModule, FormsModule],
+  imports: [TableGenericComponent],
   templateUrl: './clientes.html',
-  styleUrl: './clientes.css'
 })
-export class Clientes implements OnInit {
-
-  public error: null | string = null;
-  public listaClientes: ClienteI[] = [];
-  public listaClientesFiltrados: ClienteI[] = [];
-  public cargando: boolean = false;
-  public showModal: boolean = false;
-  public showDetails: boolean = false;
-  public terminoBusqueda: string = '';
-  public clienteEditando: ClienteI | null = null;
-  public clienteDetalles: ClienteI | null = null;
-  public eliminarCliente: ClienteI | null = null;
-  public offset = 0;
-  public limit = 6;
-  public isPagina: boolean = false;
-
-  constructor(private service: Cliente) { }
-
-  ngOnInit() {
-    this.cargando = true
-
-    this.service.listarCliente(this.offset, this.limit).subscribe({
-      next: (response) => {
-        if (!Array.isArray(response)) {
-          this.error = "Algo salio mal"
-          this.cargando = false
-          return
-        }
-
-        if (response.length === 0 && !this.isPagina) {
-          this.error = "Aun no hay datos";
-          this.cargando = false;
-          return;
-        }
-
-        if (response.length === 0 && this.isPagina) {
-          this.offset = 0;
-          this.cargarCliente();
-          return;
-        }
-
-        /*if (response.length == 0) {
-          this.error = "Aun no hay datos"
-          this.cargando = false
-          return
-        }*/
-
-        this.listaClientes = response;
-        this.listaClientesFiltrados = response; // Inicializar la lista filtrada con todos los clientes
-        this.cargando = false
+export class Clientes {
+  config: TableConfig = {
+    title: 'Panel de Clientes',
+    subtitle: 'Gestión de clientes en SiennaVet. Aquí puedes ver, editar y eliminar los registros de clientes.',
+    endpoint: 'http://localhost:8080/api/clientes',
+    enableCreation: true,
+    enableSearch: true,
+    enablePagination: true,
+    enableDetails: true,
+    enableEdit: true,
+    enableDelete: true,
+    itemsPerPage: 6,
+    fields: [
+      {
+        key: 'idCliente',
+        label: 'ID',
+        type: 'readonly',
+        display: true,
+        searchable: false
       },
-      error: (error) => {
-        this.error = 'Error del servidor'
-        console.log(error)
-        this.cargando = false
+      {
+        key: 'nombre',
+        label: 'Nombre',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       },
-    })
-  }
-
-  cargarCliente() {
-    this.cargando = true;
-
-    this.service.listarCliente(this.offset, this.limit).subscribe({
-      next: (response) => {
-        if (!Array.isArray(response)) {
-          this.error = "Algo salio mal";
-          this.cargando = false;
-          return;
-        }
-
-        if (response.length === 0 && this.offset > 0) {
-          this.offset = 0;
-          this.cargarCliente();
-          return;
-        }
-
-        this.listaClientes = response;
-        this.listaClientesFiltrados = [...response];
-        this.cargando = false;
+      {
+        key: 'apellido',
+        label: 'Apellido',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       },
-      error: (error) => {
-        this.error = 'Error del servidor';
-        console.log(error);
-        this.cargando = false;
+      {
+        key: 'dni',
+        label: 'DNI',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       },
-    });
-  }
-
-  siguientePagina() {
-    this.isPagina = true;
-    this.offset++;
-    this.cargarCliente();
-  }
-
-  anteriorPagina() {
-    this.isPagina = true;
-    if (this.offset <= 0) {
-      this.offset = 0;
-      return;
-    }
-    this.offset--;
-    this.cargarCliente();
-  }
-
-  verCliente(cliente: ClienteI) {
-    this.clienteDetalles = cliente;
-    this.showDetails = true;
-  }
-
-  cerrarDetalles() {
-    this.showDetails = false;
-    this.clienteDetalles = null;
-  }
-
-  buscarClientes() {
-    if (!this.terminoBusqueda.trim()) {
-      // Si no hay término de búsqueda, mostrar todos los clientes
-      this.listaClientesFiltrados = [...this.listaClientes];
-    } else {
-      // Filtrar los clientes según el término de búsqueda
-      const termino = this.terminoBusqueda.toLowerCase().trim();
-      this.listaClientesFiltrados = this.listaClientes.filter(cliente =>
-        cliente.nombre.toLowerCase().includes(termino) ||
-        cliente.apellido.toLowerCase().includes(termino) ||
-        cliente.dni.toLowerCase().includes(termino) ||
-        cliente.direccion.toLowerCase().includes(termino) ||
-        cliente.telefono.toLowerCase().includes(termino) ||
-        cliente.codigoPostal.toLowerCase().includes(termino)
-      );
-    }
-  }
-
-  mostrarEditarCliente(cliente: ClienteI) {
-    this.clienteEditando = cliente;
-    this.showModal = true;
-  }
-
-  cerrarModal() {
-    this.showModal = false;
-    this.clienteEditando = null;
-  }
-
-  guardarCliente() {
-    if (this.clienteEditando) {
-      this.editarCliente(this.clienteEditando);
-      this.cerrarModal();
-    }
-  }
-
-  editarCliente(clienteEditado: ClienteI) {
-    this.service.editarcliente(clienteEditado).subscribe({
-      next: (response) => {
-        console.log(response);
-        // Actualizar la lista localmente
-        const index = this.listaClientes.findIndex(c => c.idCliente === clienteEditado.idCliente);
-        if (index !== -1) {
-          this.listaClientes[index] = clienteEditado;
-          this.listaClientesFiltrados = [...this.listaClientes]; // Actualizar la lista filtrada también
-        }
+      {
+        key: 'direccion',
+        label: 'Dirección',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       },
-      error: (error) => {
-        console.error('Error al modificar el cliente:', error);
-        this.error = 'Error al modificar el cliente';
+      {
+        key: 'telefono',
+        label: 'Teléfono',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
+      },
+      {
+        key: 'codigoPostal',
+        label: 'Código Postal',
+        type: 'text',
+        display: true,
+        searchable: true,
+        editable: true
       }
-    });
-  }
+    ]
+  };
 
-  mostrarEliminarCliente(eliminarCliente: ClienteI) {
-    const confirmacion = confirm(`¿Estás seguro de eliminar el cliente con id ${eliminarCliente.idCliente}?`);
-    if (confirmacion) {
-      this.service.eliminarCliente(eliminarCliente).subscribe({
-        next: (response) => {
-          console.log(response);
-          // Actualiza el arreglo local filtrando por id
-          this.listaClientes = this.listaClientes.filter(c => c.idCliente !== eliminarCliente.idCliente);
-          this.listaClientesFiltrados = [...this.listaClientes]; // Actualizar la lista filtrada también
-        },
-        error: (error) => {
-          console.error('Error al eliminar el cliente', error);
-        }
-      });
-    }
-  }
-
-  crearNuevoCliente() {
-    this.clienteEditando = {
-      nombre: '',
-      apellido: '',
-      dni: '',
-      direccion: '',
-      telefono: '',
-      codigoPostal: ''
-    };
-    this.showModal = true;
-  }
+  constructor(public service: Cliente) { }
 }
