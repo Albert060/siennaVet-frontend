@@ -48,12 +48,6 @@ export class Mensajes implements OnInit {
           return;
         }
 
-       /* if (response.length == 0) {
-          this.error = "Aun no hay datos"
-          this.cargando = false
-          return
-        }*/
-
         this.listaContacto = response;
         this.listaContactoFiltrados = response; // Inicializar la lista filtrada con todos los mensajes
         this.cargando = false

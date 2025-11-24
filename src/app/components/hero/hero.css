@@ -91,6 +91,7 @@
 }
 
 .cta-button, .secondary-button {
+  text-align: center;
   padding: 12px 28px;
   border: none;
   border-radius: 8px;

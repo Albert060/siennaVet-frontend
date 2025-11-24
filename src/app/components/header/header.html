@@ -8,11 +8,23 @@
         <li><a href="#contact">Contactanos</a></li>
       </ul>
     </div>
-    <div class="Acceso"><button class="cta" (click)="redirectToLogin()">Login</button></div>
+    <div class="Acceso">
+      <button class="cta" (click)="redirectToLogin()">Login</button>
+    </div>
   </nav>
   <div class="mobile-menu-btn" (click)="toggleMobileMenu()">
     <span class="hamburger"></span>
     <span class="hamburger"></span>
     <span class="hamburger"></span>
   </div>
+  @if (mobileMenuOpen) {
+    <nav class="mobile-menu">
+      <ul>
+        <li><a href="#about" (click)="toggleMobileMenu()">Sobre Nosotros</a></li>
+        <li><a href="#services" (click)="toggleMobileMenu()">Servicios</a></li>
+        <li><a href="#contact" (click)="toggleMobileMenu()">Contactanos</a></li>
+      </ul>
+      <button class="cta" (click)="redirectToLogin(); toggleMobileMenu()">Login</button>
+    </nav>
+  }
 </header>
