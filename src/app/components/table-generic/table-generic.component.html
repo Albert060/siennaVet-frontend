@@ -130,17 +130,24 @@
                     <label [attr.for]="field.key">{{ field.label }}:</label>
 
                     <!-- Campo de texto -->
-                    @if (field.type === 'text' || field.type === 'email' || field.type === 'date' || !field.type) {
-
+                    @if (field.type === 'checkbox') {
+                      <input
+                        type="checkbox"
+                        [id]="field.key"
+                        [(ngModel)]="itemEditando[field.key]"
+                        [name]="field.key"
+                        class="form-control"
+                        [required]="false" />
+                    } @else if (field.type === 'text' || field.type === 'email' || field.type === 'date' || field.type === 'time' || !field.type) {
                       <input
                         type="{{ field.type || 'text' }}"
                         [id]="field.key"
                         [(ngModel)]="itemEditando[field.key]"
                         [name]="field.key"
                         class="form-control"
-                        [required]="true">
-
+                        [required]="true" />
                     }
+
 
                     <!-- Campo de selección -->
                     @if (field.type === 'select') {
@@ -170,7 +177,7 @@
 
               <div class="modal-footer">
                 <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-                <button type="submit" class="btn-guardar" [disabled]="!itemForm.form.valid">Guardar</button>
+                <button type="submit" class="btn-guardar" >Guardar</button>
               </div>
             </form>
           </div>
@@ -194,6 +201,11 @@
                 <!-- Mostrar label -->
                 <label [attr.for]="field.key">{{ field.label }}:</label>
 
+                @if (field.type === 'time') {
+                  <div class="form-control-readonly">
+                    {{ getFieldValue(itemDetalles, field) }}
+                  </div>
+                }
                 <!-- Mostrar enlace si el campo es de tipo email -->
                 @if (field.type === 'email') {
                   <div class="form-control-readonly">

@@ -17,7 +17,8 @@ export const routes: Routes = [
             { path: "vets", loadComponent: () => import('./pages/vets/vets').then(m => m.Vets) },
             { path: "clientes", loadComponent: () => import('./pages/clientes/clientes').then(m => m.Clientes) },
             { path: "razas", loadComponent: () => import('./pages/razas/razas').then(m => m.Razas) },
-            { path: "mensajes", loadComponent: () => import('./pages/mensajes/mensajes').then(m => m.Mensajes) }
+            { path: "mensajes", loadComponent: () => import('./pages/mensajes/mensajes').then(m => m.Mensajes) },
+            { path: "ficha-actualizaciones", loadComponent: () => import('./pages/ficha-actualizaciones/ficha-actualizaciones').then(m => m.FichaActualizaciones) }
         ]
     }
 ];

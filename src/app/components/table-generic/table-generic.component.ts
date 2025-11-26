@@ -357,6 +357,9 @@ export class TableGenericComponent implements OnInit {
 
   // Método para obtener el valor de un campo
   getFieldValue(item: TableData, field: TableFieldConfig): any {
+    console.log(item)
+    console.log(field)
+    console.log(item[field.key])
     return item[field.key];
   }
 

@@ -6,7 +6,7 @@ export interface TableData {
 export interface TableFieldConfig {
   key: string;          // La clave del campo
   label: string;        // Etiqueta para mostrar
-  type?: 'text' | 'email' | 'date' | 'select' | 'readonly'; // Tipo de campo
+  type?: 'text' | 'email' | 'date' | 'select' | 'readonly' | 'time' | 'checkbox'; // Tipo de campo
   editable?: boolean;   // Si el campo es editable
   searchable?: boolean; // Si el campo es searchable
   display?: boolean;    // Si el campo se muestra en la tabla
