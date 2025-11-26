@@ -19,7 +19,7 @@ export class Raza {
         return this.http.post<RazaI>(this.endpoint, crearRaza)
     }
 
-    listarRaza(offset = 0, limit = 1000) {
+    listar(offset = 0, limit = 1000) {
         return this.http.get<RazaI[]>(`${this.endpoint}?offset=${offset}&limit=${limit}`)
     }
 

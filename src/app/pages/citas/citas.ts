@@ -132,10 +132,10 @@ export class Citas implements OnInit {
 
     // Load all required data concurrently
     forkJoin({
-      citas: this.service.listarCitas(),
-      vets: this.vetService.listarVeterinario(),
-      fichas: this.fichaService.listarFicha(),
-      clientes: this.clienteService.listarCliente()
+      citas: this.service.listar(),
+      vets: this.vetService.listar(),
+      fichas: this.fichaService.listar(),
+      clientes: this.clienteService.listar()
     }).subscribe({
       next: (responses) => {
         // Handle appointments response

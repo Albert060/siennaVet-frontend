@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Contacto } from '../../services/contacto';
 import { Router } from '@angular/router';
 import { FormsModule, NgForm, NgModel } from '@angular/forms';
@@ -9,12 +9,21 @@ import { FormsModule, NgForm, NgModel } from '@angular/forms';
   templateUrl: './contact.html',
   styleUrl: './contact.css'
 })
-export class Contact {
+export class Contact implements OnInit {
   public error: null | String = null;
+  public isFirstLoad = true;
+
+  ngOnInit(): void {
+  }
 
   constructor(private service: Contacto, private router: Router) { }
 
   formContact(form: NgForm) {
+    this.isFirstLoad = false;
+    if (form.invalid) {
+      return;
+    }
+
     const nombre: string = form.value['name'];
     const email: string = form.value['email'];
     const servicio: string = form.value['service'];

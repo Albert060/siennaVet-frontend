@@ -19,7 +19,7 @@ export class Cita {
 
   constructor(private http: HttpClient) { }
 
-  listarCitas() {
+  listar() {
     return this.http.get<CitaI[]>(this.endpoint)
   }
 

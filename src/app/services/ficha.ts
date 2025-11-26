@@ -22,7 +22,7 @@ export class Ficha {
 
   constructor(private http: HttpClient) { }
 
-  listarFicha(offset = 0, limit = 1000) {
+  listar(offset = 0, limit = 1000) {
     return this.http.get<FichaAnimales[]>(`${this.endpoint}?offset=${offset}&limit=${limit}`)
   }
 

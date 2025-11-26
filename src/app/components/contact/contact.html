@@ -1,64 +1,107 @@
 <section class="contact-main" id="contact">
-    <div class="section-header">
-        <h2 class="section-title">Contactanos</h2>
-        <div class="section-subtitle">¿Tienes alguna pregunta? Estamos aquí para ayudarte</div>
+  <div class="section-header">
+    <h2 class="section-title">Contactanos</h2>
+    <div class="section-subtitle">¿Tienes alguna pregunta? Estamos aquí para ayudarte</div>
+  </div>
+
+  <div class="contact-content">
+    <div class="contact-info">
+      <div class="contact-card">
+        <div class="contact-icon">📍</div>
+        <h3>Dirección</h3>
+        <p>Calle Castro de oro, 13<br>Madrid, España</p>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">📞</div>
+        <h3>Teléfono</h3>
+        <p>+34 555 555 555<br>Disponible 24/7</p>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-icon">✉️</div>
+        <h3>Email</h3>
+        <p>info&#64;siennavet.com<br>Respuestas en 24h</p>
+      </div>
     </div>
 
-    <div class="contact-content">
-        <div class="contact-info">
-            <div class="contact-card">
-                <div class="contact-icon">📍</div>
-                <h3>Dirección</h3>
-                <p>Calle Castro de oro, 13<br>Madrid, España</p>
+    <div class="contact-form">
+      <form #contactForm="ngForm" (ngSubmit)="formContact(contactForm)">
+        <div class="form-group">
+          <label for="name">Nombre</label>
+          <input type="text" id="name" ngModel name="name" required
+                 #name="ngModel" placeholder="Tu nombre completo">
+          @if (!contactForm.submitted && name.invalid && !isFirstLoad) {
+            <div class="error">
+              El nombre es obligatorio
             </div>
-
-            <div class="contact-card">
-                <div class="contact-icon">📞</div>
-                <h3>Teléfono</h3>
-                <p>+34 555 555 555<br>Disponible 24/7</p>
-            </div>
-
-            <div class="contact-card">
-                <div class="contact-icon">✉️</div>
-                <h3>Email</h3>
-                <p>info&#64;siennavet.com<br>Respuestas en 24h</p>
-            </div>
+          }
         </div>
 
-        <div class="contact-form">
-            <form #contactForm="ngForm" (ngSubmit)="formContact(contactForm)">
-                <div class="form-group">
-                    <label for="name">Nombre</label>
-                    <input type="text" id="name" ngModel name="name" placeholder="Tu nombre completo">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" ngModel name="email" placeholder="Tu email">
-                </div>
-
-                <div class="form-group">
-                    <label for="service">Servicio</label>
-                    <select id="service" ngModel name="service">
-                        <option value="">Selecciona un servicio</option>
-                        <option value="consulta">Consulta veterinaria</option>
-                        <option value="urgencia">Urgencia</option>
-                        <option value="veterinario">Visita veterinario</option>
-                        <option value="otros">Otros</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="message">Mensaje</label>
-                    <textarea id="message" ngModel name="mensaje" placeholder="Escribe tu mensaje aquí"></textarea>
-                </div>
-
-                <button type="submit" class="submit-btn">Enviar Mensaje</button>
-            </form>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" ngModel name="email" required
+                 email
+                 pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/"
+                 #email="ngModel" placeholder="Tu email">
+          @if (!contactForm.submitted && email.invalid && !isFirstLoad) {
+            <div class="error">
+              @if (email.errors?.['required']) {
+                <span>El email es obligatorio.</span>
+              }
+              @if (email.errors?.['email'] || email.errors?.['pattern']) {
+                <span>
+        El email debe ser válido (debe contener &#64; y dominio).</span>
+              }
+            </div>
+          }
         </div>
-    </div>
 
-    <div class="contact-map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.893733596253!2d-3.731779323573459!3d40.389047757323056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4227939dd03ab7%3A0xff76381ff530f064!2sC.%20Castro%20de%20Oro%2C%2013%2C%20Carabanchel%2C%2028019%20Madrid!5e0!3m2!1ses!2ses!4v1760544810120!5m2!1ses!2ses" width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <div class="form-group">
+          <label for="service">Servicio</label>
+          <select id="service" ngModel name="service" required
+                  #service="ngModel">
+            <option value="">Selecciona un servicio</option>
+            <option value="consulta">Consulta veterinaria</option>
+            <option value="urgencia">Urgencia</option>
+            <option value="veterinario">Visita veterinario</option>
+            <option value="otros">Otros</option>
+          </select>
+          @if (!contactForm.submitted && service.invalid && !isFirstLoad) {
+            <div class="error">
+              El servicio es obligatorio
+            </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="message">Mensaje</label>
+          <textarea id="message" ngModel name="mensaje" required
+                    minlength="5"
+                    #mensaje="ngModel" placeholder="Escribe tu mensaje aquí"></textarea>
+          @if (!contactForm.submitted && mensaje.invalid && !isFirstLoad) {
+            <div class="error">
+              @if (mensaje.errors?.['required']) {
+                <span>El mensaje es obligatorio.</span>
+              }
+              @if (mensaje.errors?.['minlength']) {
+                <span>
+        El mensaje debe tener al menos 5 caracteres.
+      </span>
+              }
+            </div>
+          }
+        </div>
+
+        <button type="submit" class="submit-btn" [disabled]="contactForm.invalid">Enviar Mensaje</button>
+      </form>
     </div>
+  </div>
+
+  <div class="contact-map">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3038.893733596253!2d-3.731779323573459!3d40.389047757323056!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4227939dd03ab7%3A0xff76381ff530f064!2sC.%20Castro%20de%20Oro%2C%2013%2C%20Carabanchel%2C%2028019%20Madrid!5e0!3m2!1ses!2ses!4v1760544810120!5m2!1ses!2ses"
+      width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
 </section>

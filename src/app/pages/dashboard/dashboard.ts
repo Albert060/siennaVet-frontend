@@ -24,7 +24,7 @@ export class Dashboard {
     itemsPerPage: 6,
     additionalServices: [
       { service: null, serviceValueKey: 'idRaza', serviceLabelKey: 'nombre' }, // Placeholder para Raza
-      { service: null, serviceValueKey: 'idCliente', serviceLabelKey: 'nombreApellido' } // Placeholder para Cliente
+      { service: null, serviceValueKey: 'idCliente', serviceLabelKey: 'nombre' } // Placeholder para Cliente
     ],
     fields: [
       {
@@ -98,7 +98,7 @@ export class Dashboard {
         editable: true,
         serviceIndex: 1, // Usar el segundo servicio adicional (Cliente)
         serviceValueKey: 'idCliente',
-        serviceLabelKey: 'nombreApellido'
+        serviceLabelKey: 'apellido'
       }
     ]
   };

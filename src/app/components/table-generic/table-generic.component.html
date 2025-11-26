@@ -7,156 +7,217 @@
     <div class="search-container">
       <h2>{{ config.title }} registrados</h2>
       <!-- Mostrar el buscador solo si está habilitado -->
-      <div class="search-box" *ngIf="config.enableSearch !== false">
-        <input
-          type="text"
-          placeholder="Buscar en todos los registros..."
-          [(ngModel)]="terminoBusqueda"
-          (input)="buscar()"
-          class="search-input">
-      </div>
+      @if (config.enableSearch !== false) {
+        <div class="search-box">
+          <input
+            type="text"
+            placeholder="Buscar en todos los registros..."
+            [(ngModel)]="terminoBusqueda"
+            (input)="buscar()"
+            class="search-input">
+        </div>
+      }
     </div>
 
     <!-- Botón para crear nuevo item si está habilitado -->
-    <div class="create-btn-container" *ngIf="config.enableCreation !== false">
-      <button class="btn-crear" (click)="crearNuevo()">Crear Nuevo</button>
-    </div>
+    @if (config.enableCreation !== false) {
+      <div class="create-btn-container">
+        <button class="btn-crear" (click)="crearNuevo()">Crear Nuevo</button>
+      </div>
+    }
 
     <!-- Mostrar mensaje de carga -->
-    <div class="loading" *ngIf="cargando">
-      Cargando {{ config.title.toLowerCase() }}...
-    </div>
+    @if (cargando) {
+      <div class="loading">
+        Cargando {{ config.title.toLowerCase() }}...
+      </div>
+    }
 
     <!-- Mostrar mensaje de error -->
-    <div class="error" *ngIf="error != null && !cargando">
-      {{ error }}
-    </div>
+    @if (error != null && !cargando) {
+      <div class="error">
+        {{ error }}
+      </div>
+    }
 
     <!-- Tabla de datos -->
-    <div *ngIf="!cargando && error == null">
-      <table class="fichas-table">
-        <thead>
+    @if (!cargando && error == null) {
+      <div>
+        <table class="fichas-table">
+          <thead>
           <tr>
-            <th *ngFor="let field of config.fields" [hidden]="!isFieldVisible(field)">
-              {{ field.label }}
-            </th>
-            <th *ngIf="config.enableDetails || config.enableEdit || config.enableDelete">Acciones</th>
+            @for (field of config.fields; track field) {
+              <th [hidden]="!isFieldVisible(field)">
+                {{ field.label }}
+              </th>
+            }
+            @if (config.enableDetails || config.enableEdit || config.enableDelete) {
+              <th>Acciones</th>
+            }
           </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of listaDatosFiltrados">
-            <td *ngFor="let field of config.fields" [hidden]="!isFieldVisible(field)">
-              <!-- Mostrar enlace si el campo es de tipo email -->
-              <span *ngIf="field.type === 'email'">
-                <a [href]="'mailto:' + getFieldValue(item, field)">{{ getFieldValue(item, field) }}</a>
+          </thead>
+          <tbody>
+            @for (item of listaDatosFiltrados; track item) {
+              <tr>
+                @for (field of config.fields; track field) {
+                  <td [hidden]="!isFieldVisible(field)">
+                    <!-- Mostrar enlace si el campo es de tipo email -->
+                    @if (field.type === 'email') {
+                      <span>
+        <a [href]="'mailto:' + getFieldValue(item, field)">{{ getFieldValue(item, field) }}</a>
               </span>
-              <!-- Mostrar valor normal para otros tipos -->
-              <span *ngIf="field.type !== 'email'">
-                {{ getFieldValue(item, field) }}
+                    }
+                    <!-- Mostrar valor normal para otros tipos -->
+                    @if (field.type !== 'email') {
+                      <span>
+              {{ getFieldValue(item, field) }}
               </span>
-            </td>
-            <td class="acciones-column" *ngIf="config.enableDetails || config.enableEdit || config.enableDelete">
-              <button *ngIf="config.enableDetails" class="btn-ver" (click)="verItem(item)">Ver</button>
-              <button *ngIf="config.enableEdit" class="btn-editar" (click)="mostrarEditarItem(item)">Editar</button>
-              <button *ngIf="config.enableDelete" class="btn-eliminar" (click)="mostrarEliminarItem(item)">Eliminar</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      
-      <!-- Paginación solo si está habilitada -->
-      <div class="pagination-container" *ngIf="config.enablePagination !== false">
-        <button class="btn-anterior" (click)="anteriorPagina()" [disabled]="offset <= 0">
-          &lt; Anterior
-        </button>
-        <div class="pagination-info">
-          Página {{offset + 1}}
-        </div>
-        <button class="btn-siguiente" (click)="siguientePagina()">
-          Siguiente &gt;
-        </button>
+                    }
+                  </td>
+                }
+                @if (config.enableDetails || config.enableEdit || config.enableDelete) {
+                  <td class="acciones-column">
+                    @if (config.enableDetails) {
+                      <button class="btn-ver" (click)="verItem(item)">Ver</button>
+                    }
+                    @if (config.enableEdit) {
+                      <button class="btn-editar" (click)="mostrarEditarItem(item)">Editar</button>
+                    }
+                    @if (config.enableDelete) {
+                      <button class="btn-eliminar" (click)="mostrarEliminarItem(item)">Eliminar
+                      </button>
+                    }
+                  </td>
+                }
+              </tr>
+            }
+          </tbody>
+        </table>
+
+        <!-- Paginación solo si está habilitada -->
+        @if (config.enablePagination !== false) {
+          <div class="pagination-container">
+            <button class="btn-anterior" (click)="anteriorPagina()" [disabled]="offset <= 0">
+              &lt; Anterior
+            </button>
+            <div class="pagination-info">
+              Página {{ offset + 1 }}
+            </div>
+            <button class="btn-siguiente" (click)="siguientePagina()">
+              Siguiente &gt;
+            </button>
+          </div>
+        }
       </div>
-    </div>
+    }
   </div>
 
   <!-- Modal de edición/creación -->
-  <div class="modal-overlay" *ngIf="showModal" (click)="cerrarModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()" *ngIf="itemEditando">
-      <div class="modal-header">
-        <h3>{{ esCreacion ? (config.createFormTitle || 'Crear Nuevo') : (config.editFormTitle || 'Editar') }}</h3>
-        <span class="close-btn" (click)="cerrarModal()">&times;</span>
-      </div>
-      <div class="modal-body">
-        <form #itemForm="ngForm" (ngSubmit)="guardarItem()">
-          <div *ngFor="let field of config.fields" class="form-group">
-            <!-- Mostrar label -->
-            <label [attr.for]="field.key">{{ field.label }}:</label>
-            
-            <!-- Campo de texto -->
-            <input 
-              *ngIf="field.type === 'text' || field.type === 'email' || field.type === 'date' || !field.type" 
-              type="{{ field.type || 'text' }}" 
-              [id]="field.key"
-              [(ngModel)]="itemEditando[field.key]" 
-              [name]="field.key"
-              class="form-control"
-              [required]="true">
-              
-            <!-- Campo de selección -->
-            <select 
-              *ngIf="field.type === 'select'" 
-              [id]="field.key"
-              [(ngModel)]="itemEditando[field.key]" 
-              [name]="field.key"
-              class="form-control"
-              [required]="true">
-              <option *ngFor="let option of field.options" [value]="option.value">{{ option.label }}</option>
-            </select>
-            
-            <!-- Campo readonly -->
-            <div 
-              *ngIf="field.type === 'readonly'" 
-              class="form-control-readonly">
-              {{ itemEditando[field.key] }}
-            </div>
+  @if (showModal) {
+    <div class="modal-overlay" (click)="cerrarModal()">
+      @if (itemEditando) {
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>{{ esCreacion ? (config.createFormTitle || 'Crear Nuevo') : (config.editFormTitle || 'Editar') }}</h3>
+            <span class="close-btn" (click)="cerrarModal()">&times;</span>
           </div>
+          <div class="modal-body">
+            <form #itemForm="ngForm" (ngSubmit)="guardarItem()">
+              @for (field of config.fields; track field) {
+                @if (!esCreacion || (esCreacion && field.key != config.fields[0].key)) {
+                  <div class="form-group">
+                    <!-- Mostrar label -->
+                    <label [attr.for]="field.key">{{ field.label }}:</label>
 
-          <div class="modal-footer">
-            <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
-            <button type="submit" class="btn-guardar" [disabled]="!itemForm.form.valid">Guardar</button>
+                    <!-- Campo de texto -->
+                    @if (field.type === 'text' || field.type === 'email' || field.type === 'date' || !field.type) {
+
+                      <input
+                        type="{{ field.type || 'text' }}"
+                        [id]="field.key"
+                        [(ngModel)]="itemEditando[field.key]"
+                        [name]="field.key"
+                        class="form-control"
+                        [required]="true">
+
+                    }
+
+                    <!-- Campo de selección -->
+                    @if (field.type === 'select') {
+                      <select
+                        [id]="field.key"
+                        [(ngModel)]="itemEditando[field.key]"
+                        [name]="field.key"
+                        class="form-control"
+                        [required]="true">
+                        @for (option of field.options; track option) {
+                          <option [value]="option.value">
+                            {{ option.label }}
+                          </option>
+                        }
+                      </select>
+                    }
+
+                    <!-- Campo readonly -->
+                    @if (field.type === 'readonly') {
+                      <div class="form-control-readonly">
+                        {{ itemEditando[field.key] }}
+                      </div>
+                    }
+                  </div>
+                }
+              }
+
+              <div class="modal-footer">
+                <button type="button" class="btn-cancelar" (click)="cerrarModal()">Cancelar</button>
+                <button type="submit" class="btn-guardar" [disabled]="!itemForm.form.valid">Guardar</button>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
+        </div>
+      }
     </div>
-  </div>
+  }
 
   <!-- Modal de visualización de detalles -->
-  <div class="modal-overlay" *ngIf="showDetails" (click)="cerrarDetalles()">
-    <div class="modal-content" (click)="$event.stopPropagation()" *ngIf="itemDetalles">
-      <div class="modal-header">
-        <h3>{{ config.detailFormTitle || 'Detalles' }}</h3>
-        <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
-      </div>
-      <div class="modal-body">
-        <div *ngFor="let field of config.fields" class="form-group" [hidden]="!isFieldVisible(field)">
-          <!-- Mostrar label -->
-          <label [attr.for]="field.key">{{ field.label }}:</label>
-          
-          <!-- Mostrar enlace si el campo es de tipo email -->
-          <div *ngIf="field.type === 'email'" class="form-control-readonly">
-            <a [href]="'mailto:' + getFieldValue(itemDetalles, field)">{{ getFieldValue(itemDetalles, field) }}</a>
+  @if (showDetails) {
+    <div class="modal-overlay" (click)="cerrarDetalles()">
+      @if (itemDetalles) {
+        <div class="modal-content" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <h3>{{ config.detailFormTitle || 'Detalles' }}</h3>
+            <span class="close-btn" (click)="cerrarDetalles()">&times;</span>
           </div>
-          
-          <!-- Mostrar valor normal para otros tipos -->
-          <div *ngIf="field.type !== 'email'" class="form-control-readonly">
-            {{ getFieldValue(itemDetalles, field) }}
-          </div>
-        </div>
+          <div class="modal-body">
+            @for (field of config.fields; track field.key) {
+              <div class="form-group" [hidden]="!isFieldVisible(field)">
+                <!-- Mostrar label -->
+                <label [attr.for]="field.key">{{ field.label }}:</label>
 
-        <div class="modal-footer">
-          <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
+                <!-- Mostrar enlace si el campo es de tipo email -->
+                @if (field.type === 'email') {
+                  <div class="form-control-readonly">
+                    <a
+                      [href]="'mailto:' + getFieldValue(itemDetalles, field)">{{ getFieldValue(itemDetalles, field) }}</a>
+                  </div>
+                }
+
+                <!-- Mostrar valor normal para otros tipos -->
+                @if (field.type !== 'email') {
+                  <div class="form-control-readonly">
+                    {{ getFieldValue(itemDetalles, field) }}
+                  </div>
+                }
+              </div>
+            }
+
+            <div class="modal-footer">
+              <button type="button" class="btn-cerrar" (click)="cerrarDetalles()">Cerrar</button>
+            </div>
+          </div>
         </div>
-      </div>
+      }
     </div>
-  </div>
+  }
 </div>
+
