@@ -67,6 +67,11 @@
   font-size: 1rem;
 }
 
+.current-user {
+  padding: 0.8rem 1.5rem;
+  margin-bottom: 0.7rem;
+}
+
 .logout-container {
   padding: 1rem;
   margin-top: auto;
@@ -117,7 +122,7 @@
     justify-content: center;
     width: 100%;
   }
-  
+
   .logout-button .link-text {
     display: none;
   }

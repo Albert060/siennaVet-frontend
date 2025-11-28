@@ -3,6 +3,7 @@ import { Landing } from './pages/landing/landing';
 import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Layout } from './components/layout/layout';
+import { PageNotFound } from './pages/page-not-found/page-not-found.component';
 
 
 export const routes: Routes = [
@@ -20,7 +21,8 @@ export const routes: Routes = [
             { path: "mensajes", loadComponent: () => import('./pages/mensajes/mensajes').then(m => m.Mensajes) },
             { path: "ficha-actualizaciones", loadComponent: () => import('./pages/ficha-actualizaciones/ficha-actualizaciones').then(m => m.FichaActualizaciones) }
         ]
-    }
+    },
+    { path: "**", component: PageNotFound }
 ];
 
 export const appRoutingModule= RouterModule.forRoot(routes)
