@@ -12,6 +12,7 @@ import { FormsModule, NgForm, NgModel } from '@angular/forms';
 export class Contact implements OnInit {
   public error: null | String = null;
   public isFirstLoad = true;
+  emailPattern = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
 
   ngOnInit(): void {
   }
@@ -21,6 +22,7 @@ export class Contact implements OnInit {
   formContact(form: NgForm) {
     this.isFirstLoad = false;
     if (form.invalid) {
+      console.log("es invalido")
       return;
     }
 
@@ -28,6 +30,8 @@ export class Contact implements OnInit {
     const email: string = form.value['email'];
     const servicio: string = form.value['service'];
     const mensaje: string = form.value['mensaje'];
+
+    console.log({ nombre, email, servicio, mensaje });
 
     this.service.crearContacto({
       nombre,

@@ -42,7 +42,7 @@
           <label for="email">Email</label>
           <input type="email" id="email" ngModel name="email" required
                  email
-                 pattern="/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/"
+                 [pattern]="emailPattern"
                  #email="ngModel" placeholder="Tu email">
           @if (!contactForm.submitted && email.invalid && !isFirstLoad) {
             <div class="error">
@@ -93,7 +93,7 @@
           }
         </div>
 
-        <button type="submit" class="submit-btn" [disabled]="contactForm.invalid">Enviar Mensaje</button>
+        <button type="submit" class="submit-btn">Enviar Mensaje</button>
       </form>
     </div>
   </div>

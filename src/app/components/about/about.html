@@ -33,7 +33,31 @@
     </section>
 
     <section class="about-img">
-        <img src="../../../../veterinaria.jpg" alt="Veterinaria SiennaVet">
-        <div class="img-overlay"></div>
+        <div class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-slide" [class.active]="currentSlide === 0">
+                    <img src="../../../../veterinaria.jpg" alt="Veterinaria SiennaVet - Instalaciones">
+                </div>
+                <div class="carousel-slide" [class.active]="currentSlide === 1">
+                    <img src="../../../../veterinaria.jpg" alt="Equipo veterinario">
+                </div>
+                <div class="carousel-slide" [class.active]="currentSlide === 2">
+                    <img src="../../../../veterinaria.jpg" alt="Atención a animales exóticos">
+                </div>
+                <div class="carousel-slide" [class.active]="currentSlide === 3">
+                    <img src="../../../../veterinaria.jpg" alt="Equipamiento moderno">
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn prev" (click)="prevSlide()">&#10094;</button>
+                <button class="carousel-btn next" (click)="nextSlide()">&#10095;</button>
+            </div>
+            <div class="carousel-indicators">
+                <span class="indicator" [class.active]="currentSlide === 0" (click)="goToSlide(0)"></span>
+                <span class="indicator" [class.active]="currentSlide === 1" (click)="goToSlide(1)"></span>
+                <span class="indicator" [class.active]="currentSlide === 2" (click)="goToSlide(2)"></span>
+                <span class="indicator" [class.active]="currentSlide === 3" (click)="goToSlide(3)"></span>
+            </div>
+        </div>
     </section>
 </section>
