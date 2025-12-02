@@ -39,14 +39,17 @@
                     <img src="../../../../veterinaria.jpg" alt="Veterinaria SiennaVet - Instalaciones">
                 </div>
                 <div class="carousel-slide" [class.active]="currentSlide === 1">
-                    <img src="../../../../veterinaria.jpg" alt="Equipo veterinario">
+                    <img src="../../../../img1.jpg" alt="Equipo veterinario">
                 </div>
                 <div class="carousel-slide" [class.active]="currentSlide === 2">
-                    <img src="../../../../veterinaria.jpg" alt="Atención a animales exóticos">
+                    <img src="../../../../img4.jpg" alt="Atención a animales exóticos">
                 </div>
                 <div class="carousel-slide" [class.active]="currentSlide === 3">
-                    <img src="../../../../veterinaria.jpg" alt="Equipamiento moderno">
+                    <img src="../../../../img3.jpg" alt="Cuidados Especiales">
                 </div>
+              <div class="carousel-slide" [class.active]="currentSlide === 4">
+                <img src="../../../../img2.jpg" alt="Cuidados Especiales">
+              </div>
             </div>
             <div class="carousel-controls">
                 <button class="carousel-btn prev" (click)="prevSlide()">&#10094;</button>
@@ -57,6 +60,7 @@
                 <span class="indicator" [class.active]="currentSlide === 1" (click)="goToSlide(1)"></span>
                 <span class="indicator" [class.active]="currentSlide === 2" (click)="goToSlide(2)"></span>
                 <span class="indicator" [class.active]="currentSlide === 3" (click)="goToSlide(3)"></span>
+                <span class="indicator" [class.active]="currentSlide === 4" (click)="goToSlide(4)"></span>
             </div>
         </div>
     </section>
