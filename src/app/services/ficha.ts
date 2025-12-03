@@ -18,7 +18,7 @@ export interface FichaAnimales{
   providedIn: 'root'
 })
 export class Ficha {
-  private endpoint = "http://localhost:8080/api/fichas";
+  private endpoint = "https://siennavet-backend.onrender.com/api/fichas";
 
   constructor(private http: HttpClient) { }
 

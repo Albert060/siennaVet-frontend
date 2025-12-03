@@ -18,7 +18,7 @@ export interface FichaActualizacion {
   providedIn: 'root'
 })
 export class FichaActualizacionService {
-  private endpoint = "http://localhost:8080/api/fichaActualizadas";
+  private endpoint = "https://siennavet-backend.onrender.com/api/fichaActualizadas";
 
   constructor(private http: HttpClient) { }
 

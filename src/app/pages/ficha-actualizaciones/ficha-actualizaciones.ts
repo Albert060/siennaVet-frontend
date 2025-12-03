@@ -14,7 +14,7 @@ export class FichaActualizaciones {
   config: TableConfig = {
     title: 'Actualizaciones de Fichas',
     subtitle: 'Gestiona las actualizaciones y registros de cada ficha veterinaria.',
-    endpoint: 'http://localhost:8080/api/fichaActualizadas',
+    endpoint: 'https://siennavet-backend.onrender.com/api/fichaActualizadas',
     enableCreation: true,
     enableSearch: true,
     enablePagination: true,

@@ -12,7 +12,7 @@ export class Clientes {
   config: TableConfig = {
     title: 'Panel de Clientes',
     subtitle: 'Gestión de clientes en SiennaVet. Aquí puedes ver, editar y eliminar los registros de clientes.',
-    endpoint: 'http://localhost:8080/api/clientes',
+    endpoint: 'https://siennavet-backend.onrender.com/api/clientes',
     enableCreation: true,
     enableSearch: true,
     enablePagination: true,

@@ -15,7 +15,7 @@ export interface ClienteI {
     providedIn: 'root'
 })
 export class Cliente {
-    private endpoint = "http://localhost:8080/api/clientes";
+    private endpoint = "https://siennavet-backend.onrender.com/api/clientes";
 
     constructor(private http: HttpClient) { }
 

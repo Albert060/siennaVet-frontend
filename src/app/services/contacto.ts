@@ -13,7 +13,7 @@ export interface ContactoI {
   providedIn: 'root'
 })
 export class Contacto {
-  private endpoint = "http://localhost:8080/api/contactos";
+  private endpoint = "https://siennavet-backend.onrender.com/api/contactos";
 
   constructor(private http: HttpClient) { }
 

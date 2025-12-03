@@ -11,7 +11,7 @@ export interface RazaI {
     providedIn: 'root'
 })
 export class Raza {
-    private endpoint = "http://localhost:8080/api/razas";
+    private endpoint = "https://siennavet-backend.onrender.com/api/razas";
 
     constructor(private http: HttpClient) { }
 

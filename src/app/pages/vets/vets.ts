@@ -12,7 +12,7 @@ export class Vets {
   config: TableConfig = {
     title: 'Panel de Veterinarios',
     subtitle: 'Bienvenido al panel de veterinarios de SiennaVet. Aquí puedes gestionar la información de los veterinarios.',
-    endpoint: 'http://localhost:8080/api/veterinarios',
+    endpoint: 'https://siennavet-backend.onrender.com/api/veterinarios',
     enableCreation: true,
     enableSearch: true,
     enablePagination: true,

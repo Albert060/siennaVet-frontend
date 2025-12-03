@@ -12,7 +12,7 @@ export class Razas {
   config: TableConfig = {
     title: 'Panel de Razas',
     subtitle: 'Gestión de razas en SiennaVet. Aquí puedes ver, editar y eliminar los registros de razas.',
-    endpoint: 'http://localhost:8080/api/razas',
+    endpoint: 'https://siennavet-backend.onrender.com/api/razas',
     enableCreation: true,
     enableSearch: true,
     enablePagination: true,

@@ -14,7 +14,7 @@ export class Dashboard {
   config: TableConfig = {
     title: 'Panel de Control',
     subtitle: 'Bienvenido al panel de control de SiennaVet. Aquí puedes gestionar citas, veterinarios y otros aspectos del sistema.',
-    endpoint: 'http://localhost:8080/api/fichas',
+    endpoint: 'https://siennavet-backend.onrender.com/api/fichas',
     enableCreation: true,
     enableSearch: true,
     enablePagination: true,

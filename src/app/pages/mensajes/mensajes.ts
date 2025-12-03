@@ -12,7 +12,7 @@ export class Mensajes {
   config: TableConfig = {
     title: 'Panel de Mensajes',
     subtitle: 'Gestión de mensajes de contacto en SiennaVet. Aquí puedes ver los registros de mensajes.',
-    endpoint: 'http://localhost:8080/api/contactos',
+    endpoint: 'https://siennavet-backend.onrender.com/api/contactos',
     enableCreation: false, // Deshabilitar creación para mensajes
     enableSearch: true,
     enablePagination: true,

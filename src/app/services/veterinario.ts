@@ -18,7 +18,7 @@ export interface VeterinarioI {
     providedIn: 'root'
 })
 export class Veterinario {
-    private endpoint = "http://localhost:8080/api/veterinarios";
+    private endpoint = "https://siennavet-backend.onrender.com/api/veterinarios";
 
     constructor(private http: HttpClient) { }
 

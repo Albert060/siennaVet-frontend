@@ -15,7 +15,7 @@ export interface CitaI {
   providedIn: 'root'
 })
 export class Cita {
-  private endpoint = "http://localhost:8080/api/citas";
+  private endpoint = "https://siennavet-backend.onrender.com/api/citas";
 
   constructor(private http: HttpClient) { }
 
